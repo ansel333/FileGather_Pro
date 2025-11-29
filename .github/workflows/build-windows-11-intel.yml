@@ -45,6 +45,28 @@ jobs:
           pip install openpyxl==3.1.5
           pip install Pillow==10.4.0
 
+      - name: Prepare icon (generate if missing)
+        run: |
+          if (-Not (Test-Path "app.ico")) {
+            Write-Host "⚠️ app.ico not found, generating from large.ico..."
+            if (Test-Path "large.ico") {
+              python -c @"
+          from PIL import Image
+          img = Image.open('large.ico')
+          if img.mode != 'RGBA':
+              img = img.convert('RGBA')
+          img.save('app.ico', 'ICO')
+          Write-Host '✅ Generated app.ico from large.ico'
+          "@
+            } else {
+              Write-Host "❌ Neither app.ico nor large.ico found"
+              exit 1
+            }
+          } else {
+            Write-Host "✅ app.ico found, ready to use"
+            Get-Item app.ico | Select-Object Name, Length
+          }
+
       - name: Build executable
         run: |
           pyinstaller --onefile --windowed `
