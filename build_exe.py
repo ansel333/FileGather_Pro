@@ -9,7 +9,8 @@ from pathlib import Path
 
 # Get the absolute path of the project directory
 project_dir = Path(__file__).parent.absolute()
-main_file = project_dir / "FileGather_Pro2.3.5.py"
+main_file = project_dir / "FileGather_Pro.py"
+icon_file = project_dir / "app.ico"
 
 # PyInstaller command
 pyinstaller_cmd = [
@@ -18,6 +19,7 @@ pyinstaller_cmd = [
     "--onefile",  # Single executable file
     "--windowed",  # No console window
     "--add-data=components:components",  # Include components package
+    f"--icon={icon_file}",  # Application icon
     "--distpath=dist",  # Output directory
     "--buildpath=build",  # Build directory
     "--specpath=.",  # Spec file location
@@ -33,4 +35,6 @@ print(f"Command: {' '.join(pyinstaller_cmd)}")
 os.system(" ".join(pyinstaller_cmd))
 
 print("\nBuild complete!")
-print(f"Output: {project_dir / 'dist' / 'FileGather_Pro.exe'}")
+print(f"Output: {project_dir / 'dist' / 'FileGather_Pro.exe')")
+
+
