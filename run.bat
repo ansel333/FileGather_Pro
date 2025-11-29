@@ -23,9 +23,9 @@ if not exist ".venv311\Scripts\activate.bat" (
 )
 
 REM 检查主文件
-if not exist "FileGather_Pro2.3.5.py" (
+if not exist "FileGather_Pro.py" (
     echo.
-    echo 错误：未找到主文件 FileGather_Pro2.3.5.py
+    echo 错误：未找到主文件 FileGather_Pro.py
     echo.
     pause
     exit /b 1
@@ -39,7 +39,7 @@ echo.
 
 REM 激活虚拟环境并运行应用
 call .venv311\Scripts\activate.bat
-python FileGather_Pro2.3.5.py
+python FileGather_Pro.py
 
 echo.
 echo 应用已关闭

@@ -31,7 +31,7 @@ if (-not (Test-Path $venvPath)) {
 }
 
 # 检查主文件是否存在
-$mainFile = ".\FileGather_Pro2.3.5.py"
+$mainFile = ".\FileGather_Pro.py"
 if (-not (Test-Path $mainFile)) {
     Write-Host "❌ 错误：未找到主文件 $mainFile" -ForegroundColor Red
     exit 1
