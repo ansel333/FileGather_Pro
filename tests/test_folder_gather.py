@@ -9,7 +9,10 @@ import sys
 import tempfile
 from pathlib import Path
 
-# 添加父目录到 Python 路径
+# Set Qt platform before any Qt imports
+os.environ['QT_QPA_PLATFORM'] = 'offscreen'
+
+# Add parent directory to Python path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Test folder gathering logic

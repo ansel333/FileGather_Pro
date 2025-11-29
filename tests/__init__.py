@@ -1,5 +1,5 @@
 """
-FileGather Pro 测试套件
+FileGather Pro Test Suite
 """
 
 __version__ = "1.0.0"

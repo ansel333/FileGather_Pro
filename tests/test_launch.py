@@ -1,28 +1,28 @@
 #!/usr/bin/env python3
 """
-FileGather Pro 启动测试脚本
-检查所有依赖和环境，然后尝试启动应用
+FileGather Pro Launch Test Script
+Check all dependencies and environment, then attempt to launch the application
 """
 
 import sys
 import os
 
-# 添加父目录到 Python 路径
+# Add parent directory to Python path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def check_environment():
-    """检查环境和依赖"""
+    """Check environment and dependencies"""
     print("=" * 60)
-    print("FileGather Pro v2.3.5 - 环境检查")
+    print("FileGather Pro v2.4.0 - Environment Check")
     print("=" * 60)
     
-    # 检查 Python 版本
-    print(f"\n[CHECK] Python 版本")
-    print(f"  版本: {sys.version}")
-    print(f"  可执行文件: {sys.executable}")
+    # Check Python version
+    print(f"\n[CHECK] Python Version")
+    print(f"  Version: {sys.version}")
+    print(f"  Executable: {sys.executable}")
     
-    # 检查关键模块
-    print(f"\n[CHECK] 关键模块")
+    # Check key modules
+    print(f"\n[CHECK] Key Modules")
     modules = {
         'PyQt5': ('PyQt5', 'QtWidgets'),
         'reportlab': ('reportlab', 'lib'),
@@ -41,8 +41,8 @@ def check_environment():
             print(f"  [FAIL] {pkg_name}: {e}")
             missing.append(pkg_name)
     
-    # 检查应用模块
-    print(f"\n[CHECK] 应用模块")
+    # Check application modules
+    print(f"\n[CHECK] Application Modules")
     app_modules = [
         'components',
         'components.main_window',
@@ -62,47 +62,47 @@ def check_environment():
             missing.append(module)
     
     if missing:
-        print(f"\n[WARNING] 缺失模块: {', '.join(missing)}")
+        print(f"\n[WARNING] Missing modules: {', '.join(missing)}")
         return False
     
-    print(f"\n[SUCCESS] 所有检查通过!")
+    print(f"\n[SUCCESS] All checks passed!")
     return True
 
 def try_launch_app():
-    """尝试启动应用"""
+    """Try to launch the application"""
     print("\n" + "=" * 60)
-    print("启动应用")
+    print("Launch Application")
     print("=" * 60)
     
     try:
-        # 设置 GUI 环境
+        # Configure GUI environment
         os.environ['QT_API'] = 'pyqt5'
-        os.environ['QT_QPA_PLATFORM'] = 'offscreen'  # 如果没有 display
+        os.environ['QT_QPA_PLATFORM'] = 'offscreen'  # If no display available
         
-        print("\n[INFO] 导入应用模块...")
+        print("\n[INFO] Importing application modules...")
         from components import FileGatherPro
         from PyQt5.QtWidgets import QApplication
         
-        print("[OK] 模块导入成功")
+        print("[OK] Module import successful")
         
-        print("\n[INFO] 创建应用实例...")
+        print("\n[INFO] Creating application instance...")
         app = QApplication([])
-        print("[OK] QApplication 创建成功")
+        print("[OK] QApplication created successfully")
         
-        print("\n[INFO] 创建主窗口...")
+        print("\n[INFO] Creating main window...")
         window = FileGatherPro()
-        print("[OK] 主窗口创建成功")
+        print("[OK] Main window created successfully")
         
-        print("\n[INFO] 显示窗口...")
+        print("\n[INFO] Displaying window...")
         window.show()
-        print("[OK] 窗口已显示")
+        print("[OK] Window displayed")
         
-        print("\n[INFO] 进入事件循环...")
-        print("应用已启动! 按 Ctrl+C 退出")
+        print("\n[INFO] Entering event loop...")
+        print("Application started! Press Ctrl+C to exit")
         sys.exit(app.exec_())
 
     except Exception as e:
-        print(f"\n[FAIL] 启动失败: {e}")
+        print(f"\n[FAIL] Launch failed: {e}")
         import traceback
         traceback.print_exc()
         return False

@@ -1,14 +1,19 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-测试精确查找功能的单元测试
+Unit tests for exact filename matching functionality
 """
 
-import sys
 import os
+import sys
 
-# 添加父目录到 Python 路径
+# Set Qt platform before any Qt imports
+os.environ['QT_QPA_PLATFORM'] = 'offscreen'
+
+# Add parent directory to Python path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# 设置编码
+# Set output encoding
 if sys.stdout.encoding.lower() not in ('utf-8', 'utf8'):
     import io
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -16,68 +21,68 @@ if sys.stdout.encoding.lower() not in ('utf-8', 'utf8'):
 from components.search_logic import exact_match_filename, matches_keyword
 
 def test_exact_match_filename():
-    """测试精确文件名匹配"""
+    """Test exact filename matching"""
     
-    # 测试用例 1: 精确匹配（不考虑扩展名）
+    # Test case 1: Exact match (ignoring extension)
     assert exact_match_filename("报告.xlsx", "报告") == True
     assert exact_match_filename("报告.pdf", "报告") == True
     assert exact_match_filename("报告.docx", "报告") == True
-    print("✓ 测试 1 通过：精确匹配（不同扩展名）")
+    print("✓ Test 1 passed: Exact match (different extensions)")
     
-    # 测试用例 2: 不匹配（包含额外词汇）
+    # Test case 2: Non-match (contains extra words)
     assert exact_match_filename("年度报告.xlsx", "报告") == False
     assert exact_match_filename("2025年报告.pdf", "报告") == False
-    print("✓ 测试 2 通过：不匹配（包含额外词汇）")
+    print("✓ Test 2 passed: Non-match (contains extra words)")
     
-    # 测试用例 3: 大小写不敏感
+    # Test case 3: Case insensitive
     assert exact_match_filename("Report.xlsx", "report") == True
     assert exact_match_filename("REPORT.PDF", "report") == True
-    print("✓ 测试 3 通过：大小写不敏感")
+    print("✓ Test 3 passed: Case insensitive")
     
-    # 测试用例 4: 部分匹配应该失败
+    # Test case 4: Partial matches should fail
     assert exact_match_filename("报告汇总.xlsx", "报告") == False
     assert exact_match_filename("项目报告.pdf", "报告") == False
-    print("✓ 测试 4 通过：部分匹配失败")
+    print("✓ Test 4 passed: Partial matches fail")
     
-    # 测试用例 5: 空关键词
+    # Test case 5: Empty keyword
     assert exact_match_filename("任意文件.txt", "") == True
-    print("✓ 测试 5 通过：空关键词返回 True")
+    print("✓ Test 5 passed: Empty keyword returns True")
     
-    # 测试用例 6: 中文测试
+    # Test case 6: Chinese tests
     assert exact_match_filename("财务预算.xlsx", "财务预算") == True
     assert exact_match_filename("财务预算分析.xlsx", "财务预算") == False
-    print("✓ 测试 6 通过：中文精确匹配")
+    print("✓ Test 6 passed: Chinese exact match")
     
-    print("\n✅ 所有精确匹配测试通过！")
+    print("\n✅ All exact match tests passed!")
 
 def test_fuzzy_match():
-    """测试模糊查找的高级功能仍然正常工作"""
+    """Test advanced functionality of fuzzy matching still works"""
     
-    # 测试包含匹配
+    # Test contains matching
     assert matches_keyword("年度报告", "报告") == True
     assert matches_keyword("project_report", "report") == True
-    print("✓ 测试 1 通过：包含匹配")
+    print("✓ Test 1 passed: Contains matching")
     
-    # 测试逻辑与（必须包含）
+    # Test logical AND (must contain)
     assert matches_keyword("项目报告2025", "+项目 +报告") == True
     assert matches_keyword("项目报告2025", "+项目 +总结") == False
-    print("✓ 测试 2 通过：逻辑与")
+    print("✓ Test 2 passed: Logical AND")
     
-    # 测试排除（不包含）
+    # Test exclusion (not contains)
     assert matches_keyword("项目报告2025", "报告 -草稿") == True
     assert matches_keyword("项目报告草稿", "报告 -草稿") == False
-    print("✓ 测试 3 通过：排除关键词")
+    print("✓ Test 3 passed: Exclude keywords")
     
-    # 测试精确短语
+    # Test exact phrase
     assert matches_keyword("季度财务报告", '"财务报告"') == True
     assert matches_keyword("财务 报告", '"财务报告"') == False
-    print("✓ 测试 4 通过：精确短语")
+    print("✓ Test 4 passed: Exact phrase")
     
-    print("\n✅ 所有模糊查找测试通过！")
+    print("\n✅ All fuzzy match tests passed!")
 
 if __name__ == "__main__":
     print("=" * 50)
-    print("FileGather Pro v2.3.5.1 - 精确查找功能测试")
+    print("FileGather Pro v2.4.0 - Exact Search Functionality Test")
     print("=" * 50)
     print()
     
@@ -87,5 +92,5 @@ if __name__ == "__main__":
     
     print()
     print("=" * 50)
-    print("✅ 全部测试通过！精确查找功能正常工作")
+    print("✅ All tests passed! Exact search functionality working")
     print("=" * 50)
