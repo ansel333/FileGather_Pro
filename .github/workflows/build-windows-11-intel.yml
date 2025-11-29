@@ -50,6 +50,7 @@ jobs:
           pyinstaller --onefile --windowed `
             --name FileGather_Pro `
             --add-data "components;components" `
+            --icon app.ico `
             --distpath dist `
             --workpath build `
             --clean `
