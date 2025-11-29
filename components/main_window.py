@@ -31,7 +31,7 @@ class FileGatherPro(QMainWindow):
     
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("文件归集管理器")
+        self.setWindowTitle("文件归集管理器 - FileGather Pro v2.3.5 | daiyixr & ansel333")
         
         # 设置窗口图标
         icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "app.ico")

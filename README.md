@@ -188,6 +188,7 @@ pip install PyQt5 reportlab PyMuPDF python-docx openpyxl
 
 **项目名称**: FileGather Pro  
 **开发者**: [daiyixr](https://github.com/daiyixr)  
+**贡献者**: [ansel333](https://github.com/ansel333) - 代码重构、UI优化、CI/CD工作流  
 **创建日期**: 2024年  
 **最后更新**: 2025-11-29  
 
