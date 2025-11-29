@@ -25,6 +25,9 @@ from .search_logic import matches_keyword, search_content, exact_match_filename
 from .file_operations import copy_files_without_conflicts, copy_selected_files, delete_files_batch
 from .dialogs import FileConflictDialog, PDFLogGenerator
 
+# 导入所有的函数模块
+from . import functions
+
 
 class FileGatherPro(QMainWindow):
     """文件归集管理器主窗口类"""
@@ -47,6 +50,9 @@ class FileGatherPro(QMainWindow):
         # 初始化应用程序状态变量
         self._init_state()
         
+        # 绑定所有函数模块的方法
+        self._bind_functions()
+        
         # 注册字体和设置样式
         register_multilingual_fonts()
         self.central_widget = UIBuilder.setup_gradient_background(self)
@@ -59,6 +65,48 @@ class FileGatherPro(QMainWindow):
         
         # 记录启动日志
         self.add_log("启动程序")
+
+    def _bind_functions(self):
+        """绑定所有函数模块的方法到类实例"""
+        # 文件夹管理方法
+        self.add_search_folder = functions.add_search_folder.__get__(self, FileGatherPro)
+        self.add_drive = functions.add_drive.__get__(self, FileGatherPro)
+        self.add_drive_action = functions.add_drive_action.__get__(self, FileGatherPro)
+        self.remove_selected_folders = functions.remove_selected_folders.__get__(self, FileGatherPro)
+        self.clear_search_folders = functions.clear_search_folders.__get__(self, FileGatherPro)
+        self.update_folder_list = functions.update_folder_list.__get__(self, FileGatherPro)
+        
+        # 搜索管理方法
+        self.get_search_mode = functions.get_search_mode.__get__(self, FileGatherPro)
+        self.on_gather_mode_changed = functions.on_gather_mode_changed.__get__(self, FileGatherPro)
+        self.cancel_search_action = functions.cancel_search_action.__get__(self, FileGatherPro)
+        
+        # 搜索操作方法
+        self.start_search = functions.start_search.__get__(self, FileGatherPro)
+        self.start_exact_search = functions.start_exact_search.__get__(self, FileGatherPro)
+        self.search_folders_by_name = functions.search_folders_by_name.__get__(self, FileGatherPro)
+        self._start_folder_search = functions._start_folder_search.__get__(self, FileGatherPro)
+        self._start_folder_exact_search = functions._start_folder_exact_search.__get__(self, FileGatherPro)
+        
+        # 结果管理方法
+        self._display_search_results = functions._display_search_results.__get__(self, FileGatherPro)
+        self._update_unfound_keywords_display = functions._update_unfound_keywords_display.__get__(self, FileGatherPro)
+        self._create_keyword_view_buttons = functions._create_keyword_view_buttons.__get__(self, FileGatherPro)
+        self._show_keyword_results = functions._show_keyword_results.__get__(self, FileGatherPro)
+        self.show_context_menu = functions.show_context_menu.__get__(self, FileGatherPro)
+        self.show_file_info = functions.show_file_info.__get__(self, FileGatherPro)
+        
+        # 文件操作UI方法
+        self.copy_files = functions.copy_files.__get__(self, FileGatherPro)
+        self.delete_files = functions.delete_files.__get__(self, FileGatherPro)
+        self.generate_pdf_log = functions.generate_pdf_log.__get__(self, FileGatherPro)
+        self.select_target_folder = functions.select_target_folder.__get__(self, FileGatherPro)
+        
+        # 用户交互方法
+        self.add_log = functions.add_log.__get__(self, FileGatherPro)
+        self.open_selected_file = functions.open_selected_file.__get__(self, FileGatherPro)
+        self.open_file_folder = functions.open_file_folder.__get__(self, FileGatherPro)
+        self.show_help = functions.show_help.__get__(self, FileGatherPro)
 
     def _init_state(self):
         """初始化应用程序状态"""
