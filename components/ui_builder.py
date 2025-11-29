@@ -161,7 +161,7 @@ class UIBuilder:
         keyword_layout.addWidget(keyword_entry, 1)
         search_layout.addLayout(keyword_layout)
 
-        # 搜索模式部分
+        # 搜索模式和归集模式部分
         search_mode_layout = QHBoxLayout()
         search_mode_label = QLabel("搜索模式:")
 
@@ -186,6 +186,25 @@ class UIBuilder:
         search_mode_layout.addWidget(filename_radio)
         search_mode_layout.addWidget(content_radio)
         search_mode_layout.addWidget(both_radio)
+        
+        # 添加分隔符
+        separator = QLabel("|")
+        search_mode_layout.addWidget(separator)
+        
+        # 添加归集模式下拉框
+        gather_mode_label = QLabel("归集模式:")
+        gather_mode_combo = QComboBox()
+        gather_mode_combo.addItem("文件归集", "file")
+        gather_mode_combo.addItem("文件夹归集", "folder")
+        gather_mode_combo.setToolTip(
+            "选择归集模式：\n"
+            "- 文件归集: 搜索并归集匹配的文件\n"
+            "- 文件夹归集: 搜索并归集第一级子目录\n\n"
+            "文件夹归集模式会自动隐藏子文件夹和文件类型选项"
+        )
+        
+        search_mode_layout.addWidget(gather_mode_label)
+        search_mode_layout.addWidget(gather_mode_combo)
         search_mode_layout.addStretch(1)
 
         search_layout.addLayout(search_mode_layout)
@@ -263,9 +282,19 @@ class UIBuilder:
         file_size_layout.addWidget(file_size_combo)
         date_size_layout.addLayout(file_size_layout)
 
-        subfolders_check = QCheckBox("包含子文件夹")
+        # 创建包含子文件夹的容器以便于在文件夹归集模式下隐藏
+        subfolders_container = QWidget()
+        subfolders_layout = QHBoxLayout()
+        subfolders_layout.setContentsMargins(0, 0, 0, 0)
+        subfolders_label = QLabel("包含子文件夹:")
+        subfolders_check = QCheckBox()
         subfolders_check.setChecked(True)
-        search_layout.addWidget(subfolders_check)
+        subfolders_layout.addWidget(subfolders_label)
+        subfolders_layout.addWidget(subfolders_check)
+        subfolders_layout.addStretch()
+        subfolders_container.setLayout(subfolders_layout)
+        
+        search_layout.addWidget(subfolders_container)
         search_layout.addLayout(date_size_layout)
 
         search_group.setLayout(search_layout)
@@ -273,7 +302,8 @@ class UIBuilder:
         return (search_group, folder_list, add_folder_button, add_drive_button, 
                 remove_folder_button, clear_folders_button, keyword_entry, 
                 filename_radio, content_radio, both_radio, search_mode_group,
-                filetype_combo, mod_date_combo, file_size_combo, subfolders_check)
+                filetype_combo, mod_date_combo, file_size_combo, subfolders_check,
+                gather_mode_combo, filetype_label, subfolders_container)
 
     @staticmethod
     def build_action_buttons():
@@ -297,7 +327,7 @@ class UIBuilder:
         
         # 第二行：文件操作按钮
         file_ops_layout = QHBoxLayout()
-        target_button = QPushButton("📂 选择目标")
+        target_button = QPushButton("📂 选择目标文件夹")
         target_button.setToolTip("设置文件复制的目标文件夹")
         copy_button = QPushButton("📋 开始归集")
         copy_button.setEnabled(False)

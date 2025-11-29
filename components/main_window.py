@@ -98,7 +98,8 @@ class FileGatherPro(QMainWindow):
          self.add_drive_button, self.remove_folder_button, self.clear_folders_button,
          self.keyword_entry, self.filename_radio, self.content_radio, self.both_radio,
          self.search_mode_group, self.filetype_combo, self.mod_date_combo, 
-         self.file_size_combo, self.subfolders_check) = search_comp
+         self.file_size_combo, self.subfolders_check, self.gather_mode_combo,
+         self.filetype_label, self.subfolders_container) = search_comp
         
         # 操作按钮组件
         (_, self.search_button, self.exact_search_button, self.cancel_button, 
@@ -128,6 +129,9 @@ class FileGatherPro(QMainWindow):
         self.delete_button.clicked.connect(self.delete_files)
         self.log_button.clicked.connect(self.generate_pdf_log)
         self.help_button.clicked.connect(self.show_help)
+        
+        # 归集模式变化时隐藏/显示相关选项
+        self.gather_mode_combo.currentIndexChanged.connect(self.on_gather_mode_changed)
         
         self.results_tree.itemDoubleClicked.connect(self.show_file_info)
         self.results_tree.customContextMenuRequested.connect(self.show_context_menu)
@@ -214,6 +218,21 @@ class FileGatherPro(QMainWindow):
             return "both"
         return "filename"
 
+    def on_gather_mode_changed(self):
+        """归集模式改变时的处理"""
+        gather_mode = self.gather_mode_combo.currentData()
+        
+        if gather_mode == "folder":
+            # 文件夹归集模式：隐藏子文件夹和文件类型选项
+            self.subfolders_container.setVisible(False)
+            self.filetype_combo.setVisible(False)
+            self.filetype_label.setVisible(False)
+        else:
+            # 文件归集模式（默认）：显示所有选项
+            self.subfolders_container.setVisible(True)
+            self.filetype_combo.setVisible(True)
+            self.filetype_label.setVisible(True)
+
     def cancel_search_action(self):
         """取消搜索"""
         self.cancel_search = True
@@ -223,6 +242,231 @@ class FileGatherPro(QMainWindow):
         self.exact_search_button.setEnabled(True)
         self.add_log("取消搜索")
 
+    def search_folders_by_name(self):
+        """文件夹名称搜索 - 仅搜索第一级子文件夹"""
+        keywords_text = self.keyword_entry.toPlainText().strip()
+        keywords = [kw.strip() for kw in re.split(r'[\s\n]+', keywords_text) if kw.strip()]
+
+        if not keywords:
+            QMessageBox.warning(self, "提示", "请输入至少一个关键词。")
+            return None
+
+        keyword_results = {kw: [] for kw in keywords}
+        all_found_folders = {}
+
+        for folder in self.search_folders:
+            if self.cancel_search:
+                break
+
+            folder_path = Path(folder)
+            if not folder_path.exists():
+                continue
+
+            try:
+                # 仅搜索第一级子文件夹
+                subdirs = [d for d in folder_path.iterdir() if d.is_dir()]
+            except Exception as e:
+                print(f"访问文件夹出错: {folder} - {str(e)}")
+                continue
+
+            for subdir in subdirs:
+                if self.cancel_search:
+                    break
+
+                dir_name = subdir.name
+
+                # 关键词匹配
+                search_mode = self.get_search_mode()
+                for keyword in keywords:
+                    matches = False
+
+                    if search_mode in ["filename", "both"]:
+                        matches = matches_keyword(dir_name, keyword)
+
+                    if matches:
+                        # 获取文件夹信息
+                        try:
+                            dir_stat = subdir.stat()
+                            mod_date = datetime.datetime.fromtimestamp(dir_stat.st_mtime).date()
+                            
+                            folder_info = {
+                                "path": str(subdir),
+                                "name": dir_name,
+                                "size": 0,  # 文件夹不计算大小
+                                "date": mod_date.strftime("%Y-%m-%d")
+                            }
+
+                            keyword_results[keyword].append(folder_info)
+                            if str(subdir) not in all_found_folders:
+                                all_found_folders[str(subdir)] = folder_info
+                        except Exception as e:
+                            print(f"获取文件夹信息失败: {subdir} - {str(e)}")
+                            continue
+
+        return all_found_folders, keyword_results
+
+    def _start_folder_search(self):
+        """文件夹归集模式 - 开始搜索"""
+        keywords_text = self.keyword_entry.toPlainText().strip()
+        keywords = [kw.strip() for kw in re.split(r'[\s\n]+', keywords_text) if kw.strip()]
+
+        if not keywords:
+            QMessageBox.warning(self, "提示", "请输入至少一个关键词。")
+            self.search_button.setEnabled(True)
+            self.cancel_button.setEnabled(False)
+            return
+
+        self.add_log(f"开始搜索文件夹，关键词: {', '.join(keywords)}")
+
+        self.search_results = []
+        self.results_tree.clear()
+        self.progress_bar.setVisible(True)
+        self.progress_bar.setValue(0)
+        self.found_files_count = 0
+        self.status_count_label.setText("已找到: 0 个文件夹")
+        self.status_label.setText("正在搜索文件夹...")
+        QApplication.processEvents()
+
+        search_mode = self.get_search_mode()
+        keyword_results = {kw: [] for kw in keywords}
+        all_found_folders = {}
+
+        # 执行文件夹搜索
+        for folder in self.search_folders:
+            if self.cancel_search:
+                break
+
+            folder_path = Path(folder)
+            if not folder_path.exists():
+                continue
+
+            try:
+                # 仅搜索第一级子文件夹
+                subdirs = [d for d in folder_path.iterdir() if d.is_dir()]
+            except Exception as e:
+                print(f"访问文件夹出错: {folder} - {str(e)}")
+                continue
+
+            self.current_path_label.setText(f"当前搜索路径: {folder}")
+            self.status_label.setText(f"正在搜索: {folder}")
+            QApplication.processEvents()
+
+            for subdir in subdirs:
+                if self.cancel_search:
+                    break
+
+                dir_name = subdir.name
+
+                # 关键词匹配
+                for keyword in keywords:
+                    matches = False
+
+                    if search_mode in ["filename", "both"]:
+                        matches = matches_keyword(dir_name, keyword)
+
+                    if matches:
+                        # 获取文件夹信息
+                        try:
+                            dir_stat = subdir.stat()
+                            mod_date = datetime.datetime.fromtimestamp(dir_stat.st_mtime).date()
+                            
+                            folder_info = {
+                                "path": str(subdir),
+                                "name": dir_name,
+                                "size": 0,
+                                "date": mod_date.strftime("%Y-%m-%d")
+                            }
+
+                            keyword_results[keyword].append(folder_info)
+                            if str(subdir) not in all_found_folders:
+                                all_found_folders[str(subdir)] = folder_info
+                                self.found_files_count += 1
+                                self.status_count_label.setText(f"已找到: {self.found_files_count} 个文件夹")
+                        except Exception as e:
+                            print(f"获取文件夹信息失败: {subdir} - {str(e)}")
+                            continue
+
+        # 显示搜索结果
+        self._display_search_results(all_found_folders, keyword_results)
+
+    def _start_folder_exact_search(self):
+        """文件夹归集模式 - 精确搜索"""
+        keywords_text = self.keyword_entry.toPlainText().strip()
+        keywords = [kw.strip() for kw in re.split(r'[\s\n]+', keywords_text) if kw.strip()]
+
+        if not keywords:
+            QMessageBox.warning(self, "提示", "请输入至少一个关键词。")
+            self.exact_search_button.setEnabled(True)
+            self.cancel_button.setEnabled(False)
+            return
+
+        self.add_log(f"开始精确搜索文件夹，关键词: {', '.join(keywords)}")
+
+        self.search_results = []
+        self.results_tree.clear()
+        self.progress_bar.setVisible(True)
+        self.progress_bar.setValue(0)
+        self.found_files_count = 0
+        self.status_count_label.setText("已找到: 0 个文件夹")
+        self.status_label.setText("正在执行精确搜索...")
+        QApplication.processEvents()
+
+        keyword_results = {kw: [] for kw in keywords}
+        all_found_folders = {}
+
+        # 执行文件夹精确搜索
+        for folder in self.search_folders:
+            if self.cancel_search:
+                break
+
+            folder_path = Path(folder)
+            if not folder_path.exists():
+                continue
+
+            try:
+                # 仅搜索第一级子文件夹
+                subdirs = [d for d in folder_path.iterdir() if d.is_dir()]
+            except Exception as e:
+                print(f"访问文件夹出错: {folder} - {str(e)}")
+                continue
+
+            self.current_path_label.setText(f"当前搜索路径: {folder}")
+            self.status_label.setText(f"正在搜索: {folder}")
+            QApplication.processEvents()
+
+            for subdir in subdirs:
+                if self.cancel_search:
+                    break
+
+                dir_name = subdir.name
+
+                # 精确关键词匹配
+                for keyword in keywords:
+                    if exact_match_filename(dir_name, keyword):
+                        # 获取文件夹信息
+                        try:
+                            dir_stat = subdir.stat()
+                            mod_date = datetime.datetime.fromtimestamp(dir_stat.st_mtime).date()
+                            
+                            folder_info = {
+                                "path": str(subdir),
+                                "name": dir_name,
+                                "size": 0,
+                                "date": mod_date.strftime("%Y-%m-%d")
+                            }
+
+                            keyword_results[keyword].append(folder_info)
+                            if str(subdir) not in all_found_folders:
+                                all_found_folders[str(subdir)] = folder_info
+                                self.found_files_count += 1
+                                self.status_count_label.setText(f"已找到: {self.found_files_count} 个文件夹")
+                        except Exception as e:
+                            print(f"获取文件夹信息失败: {subdir} - {str(e)}")
+                            continue
+
+        # 显示搜索结果
+        self._display_search_results(all_found_folders, keyword_results)
+
     def start_exact_search(self):
         """开始精确搜索 - 文件名必须严格匹配"""
         if not self.search_folders:
@@ -231,6 +475,14 @@ class FileGatherPro(QMainWindow):
 
         self.cancel_button.setEnabled(True)
         self.cancel_search = False
+
+        # 检查聚合模式
+        gather_mode = self.gather_mode_combo.currentData()
+        
+        # 如果是文件夹归集模式，使用不同的搜索逻辑
+        if gather_mode == "folder":
+            self._start_folder_exact_search()
+            return
 
         keywords_text = self.keyword_entry.toPlainText().strip()
         keywords = [kw.strip() for kw in re.split(r'[\s\n]+', keywords_text) if kw.strip()]
@@ -361,6 +613,14 @@ class FileGatherPro(QMainWindow):
 
         self.cancel_button.setEnabled(True)
         self.cancel_search = False
+
+        # 检查聚合模式
+        gather_mode = self.gather_mode_combo.currentData()
+        
+        # 如果是文件夹归集模式，使用不同的搜索逻辑
+        if gather_mode == "folder":
+            self._start_folder_search()
+            return
 
         keywords_text = self.keyword_entry.toPlainText().strip()
         keywords = [kw.strip() for kw in re.split(r'[\s\n]+', keywords_text) if kw.strip()]
