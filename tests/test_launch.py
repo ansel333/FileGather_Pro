@@ -7,6 +7,9 @@ FileGather Pro 启动测试脚本
 import sys
 import os
 
+# 添加父目录到 Python 路径
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 def check_environment():
     """检查环境和依赖"""
     print("=" * 60)
@@ -97,16 +100,13 @@ def try_launch_app():
         print("\n[INFO] 进入事件循环...")
         print("应用已启动! 按 Ctrl+C 退出")
         sys.exit(app.exec_())
-        
+
     except Exception as e:
-        print(f"\n[ERROR] 启动失败: {e}")
+        print(f"\n[FAIL] 启动失败: {e}")
         import traceback
         traceback.print_exc()
         return False
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if check_environment():
         try_launch_app()
-    else:
-        print("\n[ABORT] 环境检查失败,无法启动应用")
-        sys.exit(1)

@@ -374,7 +374,7 @@ class FileGatherPro(QMainWindow):
                                 "path": str(subdir),
                                 "name": dir_name,
                                 "size": 0,
-                                "date": mod_date.strftime("%Y-%m-%d")
+                                "mod_date": mod_date.strftime("%Y-%m-%d")
                             }
 
                             keyword_results[keyword].append(folder_info)
@@ -452,7 +452,7 @@ class FileGatherPro(QMainWindow):
                                 "path": str(subdir),
                                 "name": dir_name,
                                 "size": 0,
-                                "date": mod_date.strftime("%Y-%m-%d")
+                                "mod_date": mod_date.strftime("%Y-%m-%d")
                             }
 
                             keyword_results[keyword].append(folder_info)

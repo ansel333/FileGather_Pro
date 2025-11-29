@@ -9,6 +9,9 @@ import sys
 import tempfile
 from pathlib import Path
 
+# 添加父目录到 Python 路径
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # Test folder gathering logic
 def test_folder_structure():
     """Create test folder structure and verify it can be searched"""
