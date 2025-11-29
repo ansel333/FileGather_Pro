@@ -8,6 +8,11 @@ import os
 # 添加父目录到 Python 路径
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# 设置编码
+if sys.stdout.encoding.lower() not in ('utf-8', 'utf8'):
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
 from components.search_logic import exact_match_filename, matches_keyword
 
 def test_exact_match_filename():
