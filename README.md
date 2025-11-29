@@ -4,7 +4,7 @@
 
 一个功能强大的文件管理工具，用于快速搜索、分类和管理大量文档。支持多格式文件搜索、高级关键词匹配、冲突处理和 PDF 报告生成。
 
-**当前版本**: v2.3.5.1 (2025-11-29)
+**当前版本**: v2.4.0 (2025-11-29)
 
 ---
 
@@ -41,7 +41,12 @@
 
 ### 运行程序
 ```bash
-python FileGather_Pro2.3.5.py
+python FileGather_Pro.py
+```
+
+### 或使用可执行文件
+```bash
+FileGather_Pro.exe  # Windows 可执行文件（包含自定义图标）
 ```
 
 ### 基本使用流程
@@ -61,29 +66,41 @@ python FileGather_Pro2.3.5.py
 
 ## 📦 项目结构
 
-### v2.3.5.1 架构（模块化设计 + 精确查找）
+### v2.4.0 架构（模块化 + 功能扩展 + 自动化构建）
 
 ```
 FileGather_Pro/
-├── FileGather_Pro2.3.5.py          # 应用入口（19行）
+├── FileGather_Pro.py                # 应用入口（v2.4.0）
+├── FileGather_Pro.spec              # PyInstaller 配置
+├── app.ico                          # 应用程序图标（256×256）
 ├── components/                      # 核心模块包
-│   ├── __init__.py                  # 包导出接口
-│   ├── main_window.py               # 主窗口类（684行）
-│   ├── ui_builder.py                # UI构建器（329行）
-│   ├── search_logic.py              # 搜索逻辑（121行）
-│   ├── file_operations.py           # 文件操作（112行）
-│   ├── utils.py                     # 工具函数（75行）
+│   ├── __init__.py
+│   ├── main_window.py               # 主窗口类（167行，-85%）
+│   ├── ui_builder.py                # UI构建器
+│   ├── search_logic.py              # 搜索逻辑
+│   ├── file_operations.py           # 文件操作
+│   ├── utils.py                     # 工具函数
 │   ├── dialogs/                     # 对话框子包
 │   │   ├── __init__.py
 │   │   ├── search_result_dialog.py  # 搜索结果对话框
 │   │   ├── conflict_dialog.py       # 冲突处理对话框
 │   │   ├── pdf_generator.py         # PDF生成器
 │   │   └── README.md
+│   ├── functions/                   # 业务逻辑模块（28+ 函数）
+│   │   ├── __init__.py
+│   │   ├── folder_manager.py        # 文件夹管理
+│   │   ├── search_manager.py        # 搜索管理
+│   │   ├── results_manager.py       # 结果管理
+│   │   ├── search_operations.py     # 搜索操作
+│   │   ├── file_operations_ui.py    # UI文件操作
+│   │   ├── ui_interactions.py       # UI交互
+│   │   └── README.md
 │   └── README.md
+├── tests/                           # 测试套件（24 个测试）
 ├── archive/                         # 旧版本归档
-│   ├── FileGather_Pro2.3.4.py
-│   ├── FileGather_Pro2.3.4.spec
-│   └── README.md
+├── ai-workflow/                     # 工作流文档
+├── .github/workflows/               # GitHub Actions CI/CD
+│   └── build-windows-11-intel.yml   # Windows 自动构建
 ├── .gitignore                       # Git忽略配置
 ├── LICENSE                          # Apache 2.0 许可证
 └── README.md                        # 项目说明
@@ -94,6 +111,10 @@ FileGather_Pro/
 - ✅ **低耦合** - 模块之间独立，易于测试
 - ✅ **高内聚** - 相关功能集中在同一模块
 - ✅ **易扩展** - 添加新功能只需新增模块
+- ✅ **85% 代码精简** - 主窗口从 1090 行减至 167 行
+- ✅ **专业图标** - 256×256 多分辨率图标集成
+- ✅ **自动化构建** - GitHub Actions CI/CD 工作流
+- ✅ **完整测试** - 24 个测试用例全部通过
 
 ---
 
@@ -106,10 +127,17 @@ FileGather_Pro/
 | **PyMuPDF** | PDF 内容提取 |
 | **python-docx** | Word 文件处理 |
 | **openpyxl** | Excel 文件处理 |
+| **Pillow** | 图像处理和图标生成 |
 
 ### 安装依赖
 ```bash
-pip install PyQt5 reportlab PyMuPDF python-docx openpyxl
+pip install PyQt5==5.15.11 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 openpyxl==3.1.5 Pillow==10.4.0
+```
+
+### 从可执行文件运行（推荐）
+```bash
+# 无需安装任何依赖，直接运行
+./FileGather_Pro.exe
 ```
 
 ---
@@ -140,6 +168,35 @@ pip install PyQt5 reportlab PyMuPDF python-docx openpyxl
 ---
 
 ## 📝 版本历史
+
+### 🎉 v2.4.0 (2025-11-29) - 主窗口精简与图标集成
+**重大改进**：
+- 🔧 **主窗口重构**：代码行数从 1090 行精简至 167 行（-85%）
+  - 删除 29 个重复方法
+  - 提取全部业务逻辑到 functions/ 模块
+  - 保留 5 个核心框架方法
+  
+- 🎨 **专业图标集成**
+  - 集成 256×256 多分辨率应用图标
+  - 在 File Explorer、Start Menu、Taskbar 中完美显示
+  - PyInstaller 自动嵌入图标到可执行文件
+  
+- 🔄 **工作流优化**
+  - GitHub Actions 工作流自动化构建带图标的 EXE
+  - 动态版本提取（从代码注释）
+  - 自动生成 BUILD_INFO.txt
+  - 支持一键发布到 GitHub Release
+  
+- 📦 **项目清理**
+  - 移除临时构建文件和脚本
+  - 保留生产必需的核心文件
+  - 工作区精简化
+
+**技术细节**：
+- components/main_window.py：167 行（框架代码）
+- components/functions/：28+ 个业务逻辑函数
+- PyInstaller v6.17.0 配置
+- GitHub Actions Windows 11 自动构建
 
 ### ✨ v2.3.5.1 (2025-11-29) - 精确查找功能
 **新增功能**：
@@ -213,11 +270,24 @@ pip install PyQt5 reportlab PyMuPDF python-docx openpyxl
 
 ---
 
+## 📦 获取可执行文件
+
+### GitHub Release 下载
+前往 [Releases](https://github.com/ansel333/FileGather_Pro/releases) 页面下载最新版本的 `FileGather_Pro.exe`
+
+**v2.4.0 特点**：
+- ✅ 包含自定义应用图标
+- ✅ 优化的代码结构（-85% 代码）
+- ✅ 完整的功能特性
+- ✅ 无需 Python 环境即可运行
+
+---
+
 ## 👤 作者和贡献
 
 **项目名称**: FileGather Pro  
 **开发者**: [daiyixr](https://github.com/daiyixr)  
-**贡献者**: [ansel333](https://github.com/ansel333) - 代码重构、UI优化、CI/CD工作流  
+**贡献者**: [ansel333](https://github.com/ansel333) - 代码重构、UI优化、CI/CD工作流、图标集成  
 **创建日期**: 2024年  
 **最后更新**: 2025-11-29  
 
@@ -236,10 +306,12 @@ pip install PyQt5 reportlab PyMuPDF python-docx openpyxl
 
 感谢以下开源项目的支持：
 - [PyQt5](https://www.riverbankcomputing.com/software/pyqt/) - GUI 框架
+- [PyInstaller](https://www.pyinstaller.org/) - 可执行文件构建
 - [ReportLab](https://www.reportlab.com/) - PDF 生成
 - [PyMuPDF](https://pymupdf.readthedocs.io/) - PDF 处理
 - [python-docx](https://python-docx.readthedocs.io/) - Word 处理
 - [openpyxl](https://openpyxl.readthedocs.io/) - Excel 处理
+- [Pillow](https://python-pillow.org/) - 图像处理
 
 ---
 
