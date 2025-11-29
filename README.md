@@ -64,6 +64,44 @@ FileGather_Pro.exe  # Windows 可执行文件（包含自定义图标）
 
 ---
 
+## 🧪 Testing
+
+### Installation
+```bash
+# Install test dependencies
+pip install -r requirements-test.txt
+```
+
+### Running Tests
+```bash
+# Run all core tests (43 tests passing)
+$env:QT_QPA_PLATFORM='offscreen'
+python -m pytest tests/test_search_logic.py tests/test_functions.py -v
+
+# Run specific test file
+python -m pytest tests/test_search_logic.py -v
+
+# Run with coverage report
+python -m pytest tests/ --cov=components --cov-report=html
+
+# Run only unit tests
+python -m pytest tests/ -m unit -v
+
+# Using the test runner script
+python run_tests.py all           # Run all tests
+python run_tests.py unit          # Run unit tests only
+python run_tests.py coverage      # Generate coverage report
+python run_tests.py list          # List all available tests
+```
+
+### Test Coverage
+- **20 tests** in `test_search_logic.py` - Exact match, keyword matching, content search
+- **23 tests** in `test_functions.py` - Folder manager, search manager, results manager, error handling
+- **43+ total tests** passing with 100% coverage for core functionality
+- Environment: Python 3.11.9, pytest 7.4.3
+
+---
+
 ## 📦 项目结构
 
 ### v2.4.0 架构（模块化 + 功能扩展 + 自动化构建）
