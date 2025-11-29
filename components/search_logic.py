@@ -1,6 +1,21 @@
 import re
 from pathlib import Path
 
+def exact_match_filename(filename, keyword):
+    """
+    精确查找：文件名必须严格对应关键词
+    不考虑扩展名，只匹配文件名主体
+    """
+    if not keyword:
+        return True
+    
+    # 获取文件名（不包括扩展名）
+    name_without_ext = Path(filename).stem.lower()
+    keyword_lower = keyword.strip().lower()
+    
+    # 精确匹配：文件名必须完全等于关键词
+    return name_without_ext == keyword_lower
+
 def matches_keyword(text, keyword):
     if not keyword:
         return True

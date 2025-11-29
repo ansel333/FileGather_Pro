@@ -277,30 +277,54 @@ class UIBuilder:
 
     @staticmethod
     def build_action_buttons():
-        """构建操作按钮"""
-        button_layout = QHBoxLayout()
-
-        search_button = QPushButton("开始搜索")
-        cancel_button = QPushButton("取消搜索")
+        """构建操作按钮 - 两行布局"""
+        button_layout = QVBoxLayout()
+        
+        # 第一行：搜索相关按钮
+        search_layout = QHBoxLayout()
+        search_button = QPushButton("🔍 模糊查找")
+        search_button.setToolTip("搜索包含关键词的文件（默认模式）")
+        exact_search_button = QPushButton("✓ 精确查找")
+        exact_search_button.setToolTip("搜索文件名完全匹配关键词的文件")
+        cancel_button = QPushButton("⏹ 取消搜索")
         cancel_button.setEnabled(False)
-        target_button = QPushButton("选择目标位置")
-        copy_button = QPushButton("开始文件归集")
+        cancel_button.setToolTip("停止当前搜索")
+        
+        search_layout.addWidget(search_button, 1)
+        search_layout.addWidget(exact_search_button, 1)
+        search_layout.addWidget(cancel_button, 1)
+        button_layout.addLayout(search_layout)
+        
+        # 第二行：文件操作按钮
+        file_ops_layout = QHBoxLayout()
+        target_button = QPushButton("📂 选择目标")
+        target_button.setToolTip("设置文件复制的目标文件夹")
+        copy_button = QPushButton("📋 开始归集")
         copy_button.setEnabled(False)
-        delete_button = QPushButton("删除原文件")
+        copy_button.setToolTip("将找到的文件复制到目标文件夹")
+        delete_button = QPushButton("🗑 删除原文")
         delete_button.setEnabled(False)
-        log_button = QPushButton("生成PDF日志")
+        delete_button.setToolTip("删除已复制的原始文件")
+        
+        file_ops_layout.addWidget(target_button, 1)
+        file_ops_layout.addWidget(copy_button, 1)
+        file_ops_layout.addWidget(delete_button, 1)
+        button_layout.addLayout(file_ops_layout)
+        
+        # 第三行：报告和帮助
+        utility_layout = QHBoxLayout()
+        log_button = QPushButton("📄 生成日志")
         log_button.setEnabled(True)
-        help_button = QPushButton("使用说明")
+        log_button.setToolTip("生成搜索和操作日志的PDF报告")
+        help_button = QPushButton("❓ 使用说明")
+        help_button.setToolTip("查看应用使用说明")
+        
+        utility_layout.addStretch(1)
+        utility_layout.addWidget(log_button, 1)
+        utility_layout.addWidget(help_button, 1)
+        button_layout.addLayout(utility_layout)
 
-        button_layout.addWidget(search_button)
-        button_layout.addWidget(cancel_button)
-        button_layout.addWidget(target_button)
-        button_layout.addWidget(copy_button)
-        button_layout.addWidget(delete_button)
-        button_layout.addWidget(log_button)
-        button_layout.addWidget(help_button)
-
-        return (button_layout, search_button, cancel_button, target_button, 
+        return (button_layout, search_button, exact_search_button, cancel_button, target_button, 
                 copy_button, delete_button, log_button, help_button)
 
     @staticmethod

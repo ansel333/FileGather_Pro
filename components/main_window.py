@@ -21,7 +21,7 @@ from .utils import (
     register_multilingual_fonts, format_size, is_file_locked,
     extract_filename_for_log, wrap_text, get_file_info_dict
 )
-from .search_logic import matches_keyword, search_content
+from .search_logic import matches_keyword, search_content, exact_match_filename
 from .file_operations import copy_files_without_conflicts, copy_selected_files, delete_files_batch
 from .dialogs import FileConflictDialog, PDFLogGenerator
 
@@ -31,7 +31,7 @@ class FileGatherPro(QMainWindow):
     
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("文件归集管理器 - FileGather Pro v2.3.5 | daiyixr & ansel333")
+        self.setWindowTitle("文件归集管理器 - FileGather Pro v2.3.5.1 | daiyixr & ansel333")
         
         # 设置窗口图标
         icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "app.ico")
@@ -64,7 +64,7 @@ class FileGatherPro(QMainWindow):
         """初始化应用程序状态"""
         self.search_results = []
         self.target_folder = ""
-        self.version = "2.3.5"
+        self.version = "2.3.5.1"
         self.update_log = "完成代码重构，改进易读性和组织性 (2025-11-29)"
         self.search_folders = []
         self.found_files_count = 0
@@ -101,8 +101,8 @@ class FileGatherPro(QMainWindow):
          self.file_size_combo, self.subfolders_check) = search_comp
         
         # 操作按钮组件
-        (_, self.search_button, self.cancel_button, self.target_button,
-         self.copy_button, self.delete_button, self.log_button, 
+        (_, self.search_button, self.exact_search_button, self.cancel_button, 
+         self.target_button, self.copy_button, self.delete_button, self.log_button, 
          self.help_button) = button_comp
         
         # 结果显示组件
@@ -121,6 +121,7 @@ class FileGatherPro(QMainWindow):
         self.clear_folders_button.clicked.connect(self.clear_search_folders)
         
         self.search_button.clicked.connect(self.start_search)
+        self.exact_search_button.clicked.connect(self.start_exact_search)
         self.cancel_button.clicked.connect(self.cancel_search_action)
         self.target_button.clicked.connect(self.select_target_folder)
         self.copy_button.clicked.connect(self.copy_files)
@@ -219,7 +220,127 @@ class FileGatherPro(QMainWindow):
         self.status_label.setText("搜索已取消")
         self.cancel_button.setEnabled(False)
         self.search_button.setEnabled(True)
+        self.exact_search_button.setEnabled(True)
         self.add_log("取消搜索")
+
+    def start_exact_search(self):
+        """开始精确搜索 - 文件名必须严格匹配"""
+        if not self.search_folders:
+            QMessageBox.warning(self, "错误", "请添加至少一个搜索文件夹或盘符！")
+            return
+
+        self.cancel_button.setEnabled(True)
+        self.cancel_search = False
+
+        keywords_text = self.keyword_entry.toPlainText().strip()
+        keywords = [kw.strip() for kw in re.split(r'[\s\n]+', keywords_text) if kw.strip()]
+
+        if not keywords:
+            QMessageBox.warning(self, "提示", "请输入至少一个关键词。")
+            self.exact_search_button.setEnabled(True)
+            self.cancel_button.setEnabled(False)
+            return
+
+        file_types = self.filetype_combo.currentData()
+        include_subfolders = self.subfolders_check.isChecked()
+
+        self.add_log(f"开始精确搜索，关键词: {', '.join(keywords)}，文件类型: {self.filetype_combo.currentText()}")
+
+        if file_types == "custom":
+            custom_types, ok = QInputDialog.getText(self, "自定义文件类型",
+                                                   "请输入文件扩展名，用分号分隔：\n例如: .py;.java;.cpp",
+                                                   text="")
+            if not ok or not custom_types:
+                self.exact_search_button.setEnabled(True)
+                self.cancel_button.setEnabled(False)
+                return
+            file_types = [ext.strip().lower() for ext in custom_types.split(';') if ext.strip()]
+
+        self.search_results = []
+        self.results_tree.clear()
+        self.progress_bar.setVisible(True)
+        self.progress_bar.setValue(0)
+        self.found_files_count = 0
+        self.status_count_label.setText("已找到: 0 个文件")
+        self.status_label.setText("正在执行精确搜索...")
+        QApplication.processEvents()
+
+        size_range = self.file_size_combo.currentData()
+        mod_date_range = self.mod_date_combo.currentData()
+
+        keyword_results = {kw: [] for kw in keywords}
+        all_found_files = {}
+
+        # 执行精确搜索
+        for folder in self.search_folders:
+            if self.cancel_search:
+                break
+
+            folder_path = Path(folder)
+            if not folder_path.exists():
+                continue
+
+            if include_subfolders:
+                walk_iter = os.walk(folder)
+            else:
+                try:
+                    files = [f for f in folder_path.iterdir() if f.is_file()]
+                    walk_iter = [(str(folder_path), [], [f.name for f in files])]
+                except Exception as e:
+                    print(f"访问文件夹出错: {folder} - {str(e)}")
+                    continue
+
+            for root, _, files in walk_iter:
+                if self.cancel_search:
+                    break
+
+                self.current_path_label.setText(f"当前搜索路径: {root}")
+                self.status_label.setText(f"正在搜索: {root}")
+                QApplication.processEvents()
+
+                for file in files:
+                    if self.cancel_search:
+                        break
+
+                    file_path = Path(root) / file
+
+                    try:
+                        if not file_path.exists() or not os.access(str(file_path), os.R_OK):
+                            continue
+
+                        file_stat = file_path.stat()
+                        file_size = file_stat.st_size
+                        mod_date = datetime.datetime.fromtimestamp(file_stat.st_mtime).date()
+
+                        # 检查文件大小
+                        if not (size_range[0] <= file_size <= size_range[1]):
+                            continue
+
+                        # 检查修改日期
+                        if mod_date_range != (None, None) and mod_date_range != "custom":
+                            start_date, end_date = mod_date_range
+                            if not (start_date <= mod_date <= end_date):
+                                continue
+
+                        # 检查文件类型
+                        ext = file_path.suffix.lower()
+                        if file_types and ext not in file_types:
+                            continue
+
+                        # 精确关键词匹配 - 只在文件名中进行，且必须严格匹配
+                        for keyword in keywords:
+                            if exact_match_filename(file, keyword):
+                                file_info = get_file_info_dict(file_path, file_size, mod_date)
+                                keyword_results[keyword].append(file_info)
+                                if str(file_path) not in all_found_files:
+                                    all_found_files[str(file_path)] = file_info
+
+                    except Exception as e:
+                        print(f"跳过文件 {file_path}，原因: {str(e)}")
+                        continue
+        
+        # 显示搜索结果
+        self._display_search_results(all_found_files, keyword_results)
 
     def select_target_folder(self):
         """选择目标文件夹"""
