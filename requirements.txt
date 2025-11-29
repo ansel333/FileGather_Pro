@@ -1,0 +1,13 @@
+# FileGather Pro - Core Dependencies
+# Usage: pip install -r requirements.txt
+# For development and testing, also install: pip install -r requirements-test.txt
+
+# GUI Framework
+PyQt5==5.15.11
+
+# Document Processing
+reportlab==4.4.5           # PDF generation
+PyMuPDF==1.26.6            # PDF reading and manipulation (fitz)
+python-docx==1.2.0         # Word document (.docx) support
+openpyxl==3.1.5            # Excel workbook support
+Pillow==10.4.0             # Image processing
