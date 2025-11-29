@@ -302,7 +302,7 @@ class UIBuilder:
         copy_button = QPushButton("📋 开始归集")
         copy_button.setEnabled(False)
         copy_button.setToolTip("将找到的文件复制到目标文件夹")
-        delete_button = QPushButton("🗑 删除原文")
+        delete_button = QPushButton("🗑 删除原始文件")
         delete_button.setEnabled(False)
         delete_button.setToolTip("删除已复制的原始文件")
         
