@@ -57,15 +57,7 @@ jobs:
           if [ -f "app.ico" ]; then
             ICON_FLAG="--icon app.ico"
           fi
-          
-          pyinstaller --onefile --windowed \
-            --name filegather-pro \
-            --add-data "components:components" \
-            $ICON_FLAG \
-            --distpath dist \
-            --workpath build \
-            --clean \
-            FileGather_Pro.py
+          pyinstaller --onefile --windowed --name filegather-pro --add-data "components:components" $ICON_FLAG --distpath dist --workpath build --clean FileGather_Pro.py
 
       - name: Create .deb package structure
         run: |
