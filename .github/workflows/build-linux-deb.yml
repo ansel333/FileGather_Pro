@@ -85,32 +85,12 @@ jobs:
           cp dist/filegather-pro ${PKGDIR}/usr/bin/
           chmod 755 ${PKGDIR}/usr/bin/filegather-pro
           
-          # Create desktop entry
-          tee ${PKGDIR}/usr/share/applications/filegather-pro.desktop > /dev/null << 'EOF'
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=FileGather Pro
-Comment=Professional file gathering and search management tool
-Exec=filegather-pro
-Icon=filegather-pro
-Categories=Utility;
-Terminal=false
-EOF
+          # Copy pre-built configuration files and update version
+          cp .deb-files/filegather-pro.desktop ${PKGDIR}/usr/share/applications/
+          cp .deb-files/copyright ${PKGDIR}/usr/share/doc/${PKGNAME}/
           
-          # Create DEBIAN control file
-          tee ${PKGDIR}/DEBIAN/control > /dev/null << EOF
-Package: ${PKGNAME}
-Version: ${PKGVERSION}
-Architecture: ${ARCH}
-Maintainer: ansel333 <ansel333@github.com>
-Description: Professional file gathering and search management tool
- FileGather Pro is a powerful tool for quickly searching,
- classifying and managing large amounts of documents.
- Supports multi-format file search, advanced keyword matching,
- conflict handling and PDF report generation.
-Homepage: https://github.com/ansel333/FileGather_Pro
-EOF
+          # Copy and update control file with version
+          sed "s/{VERSION}/${PKGVERSION}/g" .deb-files/control > ${PKGDIR}/DEBIAN/control
           
           # Set permissions
           chmod 755 ${PKGDIR}/DEBIAN

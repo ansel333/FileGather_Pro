@@ -1,0 +1,10 @@
+Package: filegather-pro
+Version: {VERSION}
+Architecture: amd64
+Maintainer: ansel333 <ansel333@github.com>
+Description: Professional file gathering and search management tool
+ FileGather Pro is a powerful tool for quickly searching,
+ classifying and managing large amounts of documents.
+ Supports multi-format file search, advanced keyword matching,
+ conflict handling and PDF report generation.
+Homepage: https://github.com/ansel333/FileGather_Pro

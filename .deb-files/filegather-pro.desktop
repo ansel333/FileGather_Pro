@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=FileGather Pro
+Comment=Professional file gathering and search management tool
+Exec=filegather-pro
+Icon=filegather-pro
+Categories=Utility;
+Terminal=false
