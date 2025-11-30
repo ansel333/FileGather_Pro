@@ -139,8 +139,9 @@ jobs:
           cp dist/filegather-pro deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/bin/
           chmod 755 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/bin/filegather-pro
           
-          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/applications/filegather-pro.desktop << EOF
-[Desktop Entry]
+          python3 << 'PYTHON_EOF'
+          import os
+          desktop_content = """[Desktop Entry]
 Version=1.0
 Type=Application
 Name=FileGather Pro
@@ -148,19 +149,21 @@ Comment=Professional file gathering and search management tool
 Exec=filegather-pro
 Icon=filegather-pro
 Categories=Utility;
-Terminal=false
-EOF
+Terminal=false"""
+          with open('deb_build/filegather-pro_${VERSION}-1_amd64/usr/share/applications/filegather-pro.desktop', 'w') as f:
+              f.write(desktop_content)
           
-          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/DEBIAN/control << EOF
-Package: ${PKGNAME}
-Version: ${PKGVERSION}
-Architecture: ${ARCH}
+          control_content = """Package: filegather-pro
+Version: ${VERSION}-1
+Architecture: amd64
 Maintainer: ansel333 <ansel333@github.com>
 Description: Professional file gathering and search management tool
  FileGather Pro is a powerful tool for quickly searching,
  classifying and managing large amounts of documents.
-Homepage: https://github.com/ansel333/FileGather_Pro
-EOF
+Homepage: https://github.com/ansel333/FileGather_Pro"""
+          with open('deb_build/filegather-pro_${VERSION}-1_amd64/DEBIAN/control', 'w') as f:
+              f.write(control_content)
+          PYTHON_EOF
           
           chmod 755 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/DEBIAN
           chmod 644 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/DEBIAN/control

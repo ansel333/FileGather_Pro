@@ -53,14 +53,14 @@ jobs:
           if [ ! -f "app.ico" ]; then
             echo "⚠️ app.ico not found, checking for fallback..."
             if [ -f "large.ico" ]; then
-              python << EOF
+              python3 << 'PYTHON_EOF'
 from PIL import Image
 img = Image.open('large.ico')
 if img.mode != 'RGBA':
     img = img.convert('RGBA')
 img.save('app.ico', 'ICO')
 print('✅ Generated app.ico from large.ico')
-EOF
+PYTHON_EOF
             else
               echo "⚠️ No icon files found, building without custom icon"
             fi
