@@ -6,7 +6,7 @@ PDF日志生成器模块
 import datetime
 import traceback
 
-from PyQt5.QtWidgets import QMessageBox, QInputDialog
+from PyQt6.QtWidgets import QMessageBox, QInputDialog
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet

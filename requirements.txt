@@ -3,7 +3,7 @@
 # For development and testing, also install: pip install -r requirements-test.txt
 
 # GUI Framework
-PyQt5==5.15.11
+PyQt6==6.7.1
 
 # Document Processing
 reportlab==4.4.5           # PDF generation

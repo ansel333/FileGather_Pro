@@ -8,9 +8,9 @@ import os
 import datetime
 from pathlib import Path
 
-from PyQt5.QtCore import Qt, QPoint
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (
+from PyQt6.QtCore import Qt, QPoint
+from PyQt6.QtGui import QIcon
+from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QFileDialog, QMessageBox, 
     QInputDialog, QTreeWidgetItem, QMenu, QAction, QDialog, 
     QScrollArea, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QTreeWidget

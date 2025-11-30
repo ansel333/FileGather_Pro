@@ -7,7 +7,7 @@ import os
 import shutil
 import hashlib
 from pathlib import Path
-from PyQt5.QtWidgets import QMessageBox, QApplication
+from PyQt6.QtWidgets import QMessageBox, QApplication
 
 
 def calculate_hash(filepath):

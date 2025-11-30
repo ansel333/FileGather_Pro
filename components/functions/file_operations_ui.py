@@ -6,7 +6,7 @@ Includes copy, delete, and PDF log generation
 import os
 from pathlib import Path
 
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QApplication
+from PyQt6.QtWidgets import QFileDialog, QMessageBox, QApplication
 
 from ..file_operations import copy_files_without_conflicts, copy_selected_files, delete_files_batch
 from ..dialogs import FileConflictDialog, PDFLogGenerator
@@ -86,7 +86,7 @@ def delete_files(self):
         self.status_label.setText(f"已删除 {success_count}/{len(self.search_results)} 个文件")
         
         # 更新结果树
-        from PyQt5.QtCore import Qt
+        from PyQt6.QtCore import Qt
         
         remaining_files = []
         for file_info in self.search_results:

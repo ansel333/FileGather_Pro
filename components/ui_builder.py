@@ -4,9 +4,9 @@ UI 构建器模块
 """
 
 import datetime
-from PyQt5.QtCore import Qt, QPoint
-from PyQt5.QtGui import QColor, QPalette, QLinearGradient, QBrush, QFont
-from PyQt5.QtWidgets import (
+from PyQt6.QtCore import Qt, QPoint
+from PyQt6.QtGui import QColor, QPalette, QLinearGradient, QBrush, QFont
+from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel,
     QPushButton, QComboBox, QCheckBox, QGroupBox, QFileDialog,
     QMessageBox, QTreeWidget, QProgressBar, QListWidget,

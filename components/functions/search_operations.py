@@ -8,7 +8,7 @@ import datetime
 import re
 from pathlib import Path
 
-from PyQt5.QtWidgets import QMessageBox, QInputDialog, QApplication
+from PyQt6.QtWidgets import QMessageBox, QInputDialog, QApplication
 
 from ..search_logic import matches_keyword, search_content, exact_match_filename
 from ..utils import get_file_info_dict

@@ -3,9 +3,9 @@
 显示关键词搜索结果的树形视图
 """
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import (
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QColor
+from PyQt6.QtWidgets import (
     QDialog, QVBoxLayout, QLabel, QTreeWidget, QTreeWidgetItem,
     QDialogButtonBox
 )

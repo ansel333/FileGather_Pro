@@ -6,8 +6,8 @@ Includes keyword view buttons, result display, and UI updates
 import datetime
 from pathlib import Path
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import (
     QTreeWidgetItem, QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QTreeWidget
 )
 
@@ -200,7 +200,7 @@ def _show_keyword_results(self, keyword):
 
 def show_context_menu(self, position):
     """显示右键菜单"""
-    from PyQt5.QtWidgets import QMenu, QAction
+    from PyQt6.QtWidgets import QMenu, QAction
     
     menu = QMenu()
     open_file_action = QAction("打开文件", self)
@@ -216,7 +216,7 @@ def show_context_menu(self, position):
 def show_file_info(self, item, column):
     """显示文件详细信息"""
     import os
-    from PyQt5.QtWidgets import QMessageBox
+    from PyQt6.QtWidgets import QMessageBox
     
     file_path = item.data(0, Qt.UserRole)
     if not file_path:
@@ -275,5 +275,5 @@ def show_file_info(self, item, column):
         QMessageBox.information(self, "文件详情", info)
         self.add_log(f"查看文件信息: {file_path}", file_path)
     except Exception as e:
-        from PyQt5.QtWidgets import QMessageBox
+        from PyQt6.QtWidgets import QMessageBox
         QMessageBox.warning(self, "错误", f"无法获取文件信息: {str(e)}")

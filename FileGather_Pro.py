@@ -8,7 +8,7 @@
 
 import sys
 import os
-from PyQt5.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication
 
 # 添加components路径到模块搜索路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
