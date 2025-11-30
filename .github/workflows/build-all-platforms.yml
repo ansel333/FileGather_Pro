@@ -55,7 +55,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-12
+          - os: macos-13
             arch: x86_64
             platform: Intel
           - os: macos-14
