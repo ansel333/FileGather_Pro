@@ -439,7 +439,10 @@ If you have questions or suggestions, please:
 
 ## 🙏 Acknowledgments
 
-Thanks to the following open-source projects:
+**Special thanks to:**
+- [daiyixr](https://github.com/daiyixr) - Original FileGather project creator
+
+**Open-source projects used:**
 - [PyQt6](https://www.riverbankcomputing.com/software/pyqt/) - GUI framework (6.7.1)
 - [PyInstaller](https://www.pyinstaller.org/) - Executable file building
 - [ReportLab](https://www.reportlab.com/) - PDF generation

@@ -439,7 +439,10 @@ filegather-pro
 
 ## 🙏 感谢
 
-感谢以下开源项目：
+**特别感谢：**
+- [daiyixr](https://github.com/daiyixr) - 原始 FileGather 项目创建者
+
+**使用的开源项目：**
 - [PyQt6](https://www.riverbankcomputing.com/software/pyqt/) - GUI 框架（6.7.1）
 - [PyInstaller](https://www.pyinstaller.org/) - 可执行文件构建
 - [ReportLab](https://www.reportlab.com/) - PDF 生成
