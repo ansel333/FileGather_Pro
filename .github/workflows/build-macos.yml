@@ -48,27 +48,6 @@ jobs:
           pip install openpyxl==3.1.5
           pip install Pillow==10.4.0
 
-      - name: Prepare icon
-        run: |
-          if [ ! -f "app.ico" ]; then
-            echo "⚠️ app.ico not found, checking for fallback..."
-            if [ -f "large.ico" ]; then
-              python3 << 'PYTHON_EOF'
-from PIL import Image
-img = Image.open('large.ico')
-if img.mode != 'RGBA':
-    img = img.convert('RGBA')
-img.save('app.ico', 'ICO')
-print('✅ Generated app.ico from large.ico')
-PYTHON_EOF
-            else
-              echo "⚠️ No icon files found, building without custom icon"
-            fi
-          else
-            echo "✅ app.ico found, ready to use"
-            ls -lh app.ico
-          fi
-
       - name: Build executable
         run: |
           ICON_FLAG=""

@@ -134,14 +134,15 @@ jobs:
           PKGNAME="filegather-pro"
           PKGVERSION="${VERSION}-1"
           ARCH="amd64"
+          PKGDIR="deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}"
           
-          mkdir -p deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/{usr/bin,usr/share/applications,usr/share/doc/${PKGNAME},DEBIAN}
-          cp dist/filegather-pro deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/bin/
-          chmod 755 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/bin/filegather-pro
+          mkdir -p ${PKGDIR}/{usr/bin,usr/share/applications,usr/share/doc/${PKGNAME},DEBIAN}
+          cp dist/filegather-pro ${PKGDIR}/usr/bin/
+          chmod 755 ${PKGDIR}/usr/bin/filegather-pro
           
-          python3 << 'PYTHON_EOF'
-          import os
-          desktop_content = """[Desktop Entry]
+          # Create desktop entry
+          tee ${PKGDIR}/usr/share/applications/filegather-pro.desktop > /dev/null << 'EOF'
+[Desktop Entry]
 Version=1.0
 Type=Application
 Name=FileGather Pro
@@ -149,24 +150,23 @@ Comment=Professional file gathering and search management tool
 Exec=filegather-pro
 Icon=filegather-pro
 Categories=Utility;
-Terminal=false"""
-          with open('deb_build/filegather-pro_${VERSION}-1_amd64/usr/share/applications/filegather-pro.desktop', 'w') as f:
-              f.write(desktop_content)
+Terminal=false
+EOF
           
-          control_content = """Package: filegather-pro
-Version: ${VERSION}-1
-Architecture: amd64
+          # Create DEBIAN control file
+          tee ${PKGDIR}/DEBIAN/control > /dev/null << EOF
+Package: ${PKGNAME}
+Version: ${PKGVERSION}
+Architecture: ${ARCH}
 Maintainer: ansel333 <ansel333@github.com>
 Description: Professional file gathering and search management tool
  FileGather Pro is a powerful tool for quickly searching,
  classifying and managing large amounts of documents.
-Homepage: https://github.com/ansel333/FileGather_Pro"""
-          with open('deb_build/filegather-pro_${VERSION}-1_amd64/DEBIAN/control', 'w') as f:
-              f.write(control_content)
-          PYTHON_EOF
+Homepage: https://github.com/ansel333/FileGather_Pro
+EOF
           
-          chmod 755 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/DEBIAN
-          chmod 644 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/DEBIAN/control
+          chmod 755 ${PKGDIR}/DEBIAN
+          chmod 644 ${PKGDIR}/DEBIAN/control
           
           cd deb_build
           fakeroot dpkg-deb --build ${PKGNAME}_${PKGVERSION}_${ARCH}
