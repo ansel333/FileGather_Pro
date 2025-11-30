@@ -3,7 +3,8 @@ Folder Manager - Handles folder selection and management
 """
 
 from PyQt6.QtCore import QPoint
-from PyQt6.QtWidgets import QFileDialog, QMessageBox, QMenu, QAction
+from PyQt6.QtGui import QAction
+from PyQt6.QtWidgets import QFileDialog, QMessageBox, QMenu
 from pathlib import Path
 
 

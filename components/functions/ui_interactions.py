@@ -125,10 +125,10 @@ def show_help(self):
 
     close_button = QPushButton("关闭")
     close_button.clicked.connect(help_dialog.accept)
-    layout.addWidget(close_button, alignment=Qt.AlignCenter)
+    layout.addWidget(close_button, alignment=Qt.AlignmentFlag.AlignCenter)
 
     help_dialog.setLayout(layout)
-    help_dialog.exec_()
+    help_dialog.exec()
 
 
 def cancel_search_action(self):

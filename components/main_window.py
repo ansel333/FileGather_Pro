@@ -9,10 +9,10 @@ import datetime
 from pathlib import Path
 
 from PyQt6.QtCore import Qt, QPoint
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QAction
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QFileDialog, QMessageBox, 
-    QInputDialog, QTreeWidgetItem, QMenu, QAction, QDialog, 
+    QInputDialog, QTreeWidgetItem, QMenu, QDialog, 
     QScrollArea, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QTreeWidget
 )
 

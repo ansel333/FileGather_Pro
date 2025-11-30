@@ -43,7 +43,7 @@ def copy_files(self):
 
     # 处理冲突
     conflict_dialog = FileConflictDialog(self, self.search_results, self.target_folder)
-    if conflict_dialog.exec_() == FileConflictDialog.Accepted:
+    if conflict_dialog.exec() == FileConflictDialog.Accepted:
         files_to_copy = conflict_dialog.get_selected_files()
         copy_selected_files(self, files_to_copy)
 
@@ -62,17 +62,17 @@ def delete_files(self):
         "禁止将软件用于非法目的。"
     )
     reply = QMessageBox.warning(self, "警告", disclaimer,
-                              QMessageBox.Ok | QMessageBox.Cancel)
+                              QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel)
 
-    if reply != QMessageBox.Ok:
+    if reply != QMessageBox.StandardButton.Ok:
         return
 
     # 二次确认
     reply = QMessageBox.question(self, "确认删除",
                                 "确定要永久删除原文件吗？此操作不可撤销！",
-                                QMessageBox.Yes | QMessageBox.No)
+                                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
 
-    if reply == QMessageBox.Yes:
+    if reply == QMessageBox.StandardButton.Yes:
         files_to_delete = [f['path'] for f in self.search_results]
         success_count, error_files = delete_files_batch(self, files_to_delete)
 

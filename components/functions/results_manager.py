@@ -195,12 +195,13 @@ def _show_keyword_results(self, keyword):
     layout.addLayout(button_layout)
     
     dialog.setLayout(layout)
-    dialog.exec_()
+    dialog.exec()
 
 
 def show_context_menu(self, position):
-    """显示右键菜单"""
-    from PyQt6.QtWidgets import QMenu, QAction
+    """昺示右键菜单"""
+    from PyQt6.QtGui import QAction
+    from PyQt6.QtWidgets import QMenu
     
     menu = QMenu()
     open_file_action = QAction("打开文件", self)

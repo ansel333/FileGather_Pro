@@ -5,13 +5,13 @@ UI 构建器模块
 
 import datetime
 from PyQt6.QtCore import Qt, QPoint
-from PyQt6.QtGui import QColor, QPalette, QLinearGradient, QBrush, QFont
+from PyQt6.QtGui import QColor, QPalette, QLinearGradient, QBrush, QFont, QAction
 from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel,
     QPushButton, QComboBox, QCheckBox, QGroupBox, QFileDialog,
     QMessageBox, QTreeWidget, QProgressBar, QListWidget,
     QTextEdit, QRadioButton, QButtonGroup, QHeaderView, QAbstractItemView,
-    QMenu, QAction, QPlainTextEdit
+    QMenu, QPlainTextEdit
 )
 
 
@@ -91,7 +91,7 @@ class UIBuilder:
         gradient = QLinearGradient(0, 0, 0, window.height())
         gradient.setColorAt(0, QColor(230, 245, 255))
         gradient.setColorAt(1, QColor(180, 220, 255))
-        palette.setBrush(QPalette.Window, QBrush(gradient))
+        palette.setBrush(QPalette.ColorRole.Window, QBrush(gradient))
         window.setPalette(palette)
         
         return central_widget
@@ -100,12 +100,12 @@ class UIBuilder:
     def build_title_widgets(version):
         """构建标题和版本信息小部件"""
         title_label = QLabel("文件归集管理器")
-        title_label.setFont(QFont("Arial", 18, QFont.Bold))
-        title_label.setAlignment(Qt.AlignCenter)
+        title_label.setFont(QFont("Arial", 18, QFont.Weight.Bold))
+        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title_label.setStyleSheet("color: #2c3e50;")
 
         version_label = QLabel(f"版本: V{version} | © 2025 D&Ai/2FX 文件归集管理器")
-        version_label.setAlignment(Qt.AlignCenter)
+        version_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         version_label.setStyleSheet("color: #7f8c8d; font-size: 10pt;")
         
         return title_label, version_label
@@ -367,10 +367,10 @@ class UIBuilder:
         results_tree.setHeaderLabels(["文件名", "路径", "大小", "修改日期", "匹配关键词"])
         results_tree.setColumnWidth(0, 250)
         results_tree.setColumnWidth(1, 350)
-        results_tree.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        results_tree.setContextMenuPolicy(Qt.CustomContextMenu)
-        results_tree.header().setSectionResizeMode(0, QHeaderView.Interactive)
-        results_tree.header().setSectionResizeMode(1, QHeaderView.Interactive)
+        results_tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        results_tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        results_tree.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Interactive)
+        results_tree.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Interactive)
         results_tree.header().setStretchLastSection(False)
         results_tree.setMinimumHeight(125)
 
@@ -396,8 +396,8 @@ class UIBuilder:
         keywords_info_label = QLabel()
         keywords_info_label.setStyleSheet("color: #7f8c8d; font-size: 9pt;")
         keywords_info_label.setWordWrap(True)
-        keywords_info_label.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
-        keywords_info_label.setCursor(Qt.IBeamCursor)
+        keywords_info_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse | Qt.TextInteractionFlag.TextSelectableByKeyboard)
+        keywords_info_label.setCursor(Qt.CursorShape.IBeamCursor)
         results_layout.addWidget(keywords_info_label)
         
         # 关键词查看按钮容器
@@ -428,7 +428,7 @@ class UIBuilder:
         unfound_keywords_text = QPlainTextEdit()
         unfound_keywords_text.setMaximumHeight(100)
         unfound_keywords_text.setReadOnly(True)
-        unfound_keywords_text.setLineWrapMode(QPlainTextEdit.NoWrap)
+        unfound_keywords_text.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
         unfound_keywords_layout.addWidget(unfound_keywords_text)
         unfound_keywords_group.setLayout(unfound_keywords_layout)
         unfound_keywords_group.setVisible(False)

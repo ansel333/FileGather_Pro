@@ -45,7 +45,7 @@ class FileConflictDialog(QDialog):
 
         # 文件列表
         self.file_list = QListWidget()
-        self.file_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.file_list.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
 
         for file_info in self.files:
             file_name = file_info['name']
