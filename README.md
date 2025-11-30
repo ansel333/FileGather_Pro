@@ -421,6 +421,22 @@ If you have questions or suggestions, please:
 
 ---
 
+## 📖 Project Origin
+
+**FileGather Pro** originated as a fork of [daiyixr/FileGather](https://github.com/daiyixr/FileGather) but has since evolved into an independent project with significant changes:
+
+- ✅ Complete architectural refactoring (1686 lines → modular structure)
+- ✅ Upgraded from PyQt5 to PyQt6 6.7.1
+- ✅ Comprehensive multi-platform CI/CD workflows (Windows, macOS, Linux)
+- ✅ 47+ unit tests with full test coverage
+- ✅ Unified version management system
+- ✅ Professional icon integration and UI optimization
+- ✅ Enhanced documentation and project organization
+
+**Note**: Due to substantial changes and divergence from the original project, merging back is no longer feasible. This repository maintains its own independent development path.
+
+---
+
 ## 🙏 Acknowledgments
 
 Thanks to the following open-source projects:

@@ -421,10 +421,26 @@ filegather-pro
 
 ---
 
-## 🙏 致谢
+## 📖 项目来源
 
-感谢以下开源项目的支持：
-- [PyQt6](https://www.riverbankcomputing.com/software/pyqt/) - GUI 框架 (6.7.1)
+**FileGather Pro** 最初源自 [daiyixr/FileGather](https://github.com/daiyixr/FileGather) 的一个分支，但已演变为具有大量改进的独立项目：
+
+- ✅ 完整的架构重构（1686 行 → 模块化结构）
+- ✅ 从 PyQt5 升级到 PyQt6 6.7.1
+- ✅ 完整的跨平台 CI/CD 工作流（Windows、macOS、Linux）
+- ✅ 47+ 单元测试，完整的测试覆盖
+- ✅ 统一的版本管理系统
+- ✅ 专业化的图标集成和 UI 优化
+- ✅ 增强的文档和项目组织
+
+**说明**：由于代码变动幅度大且与原项目差异显著，合并回上游已无实际意义。本仓库维护独立的开发路径。
+
+---
+
+## 🙏 感谢
+
+感谢以下开源项目：
+- [PyQt6](https://www.riverbankcomputing.com/software/pyqt/) - GUI 框架（6.7.1）
 - [PyInstaller](https://www.pyinstaller.org/) - 可执行文件构建
 - [ReportLab](https://www.reportlab.com/) - PDF 生成
 - [PyMuPDF](https://pymupdf.readthedocs.io/) - PDF 处理
