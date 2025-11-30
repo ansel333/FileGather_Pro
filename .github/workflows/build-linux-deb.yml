@@ -85,7 +85,7 @@ jobs:
           chmod 755 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/bin/filegather-pro
           
           # Create desktop entry
-          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/applications/filegather-pro.desktop << 'EOF'
+          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/applications/filegather-pro.desktop << EOF
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -112,11 +112,11 @@ Homepage: https://github.com/ansel333/FileGather_Pro
 EOF
           
           # Create changelog
-          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/doc/${PKGNAME}/changelog.gz << 'EOF'
+          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/doc/${PKGNAME}/changelog.gz << EOF
 EOF
           
           # Create copyright file
-          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/doc/${PKGNAME}/copyright << 'EOF'
+          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/doc/${PKGNAME}/copyright << EOF
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: FileGather_Pro
 Upstream-Contact: ansel333 <ansel333@github.com>

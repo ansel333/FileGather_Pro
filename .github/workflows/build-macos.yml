@@ -53,7 +53,7 @@ jobs:
           if [ ! -f "app.ico" ]; then
             echo "⚠️ app.ico not found, checking for fallback..."
             if [ -f "large.ico" ]; then
-              python << 'EOF'
+              python << EOF
 from PIL import Image
 img = Image.open('large.ico')
 if img.mode != 'RGBA':
