@@ -204,7 +204,8 @@ jobs:
         with:
           files: |
             artifacts/**/FileGather_Pro.exe
-            artifacts/**/FileGather_Pro
+            artifacts/**/[Ff]ile[Gg]ather[Pp]ro
+            artifacts/**/filegather-pro
             artifacts/**/*.deb
           draft: false
           prerelease: false
