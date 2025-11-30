@@ -18,13 +18,8 @@ jobs:
       - name: Extract version from main file
         id: version
         run: |
-          $content = Get-Content FileGather_Pro.py -Raw
-          $match = $content | Select-String -Pattern '文件归集管理器\s+(\d+\.\d+\.\d+)'
-          if ($match) {
-            $version = $match.Matches[0].Groups[1].Value
-          } else {
-            $version = "2.4.0"
-          }
+          $version = Get-Content VERSION -Raw
+          $version = $version.Trim()
           echo "VERSION=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           Write-Host "Detected version: $version"
 

@@ -5,6 +5,7 @@
 """
 
 import os
+import sys
 import datetime
 from pathlib import Path
 
@@ -23,13 +24,22 @@ from .dialogs import FileConflictDialog, PDFLogGenerator
 # 导入所有的函数模块
 from . import functions
 
+def get_version():
+    """从 VERSION 文件读取版本号"""
+    try:
+        version_file = os.path.join(os.path.dirname(__file__), "..", 'VERSION')
+        with open(version_file, 'r') as f:
+            return f.read().strip()
+    except:
+        return "2.5.0"
 
 class FileGatherPro(QMainWindow):
     """文件归集管理器主窗口类"""
     
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("文件归集管理器 - FileGather Pro v2.4.0 | daiyixr & ansel333")
+        version = get_version()
+        self.setWindowTitle(f"文件归集管理器 - FileGather Pro v{version} | daiyixr & ansel333")
         
         # 设置窗口图标
         icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "app.ico")
@@ -114,7 +124,7 @@ class FileGatherPro(QMainWindow):
         self.found_files_count = 0
         self.keyword_results = {}
         self.unfound_keywords = []
-        self.version = "2.4.0"
+        self.version = "2.5.0"
 
     def _build_ui(self):
         """构建用户界面"""

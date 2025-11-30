@@ -4,7 +4,7 @@
 
 一个功能强大的文件管理工具，用于快速搜索、分类和管理大量文档。支持多格式文件搜索、高级关键词匹配、冲突处理和 PDF 报告生成。
 
-**当前版本**: v2.4.0 (2025-11-29)
+**当前版本**: v2.5.0 (2025-11-30)
 
 ---
 
@@ -216,6 +216,37 @@ pip install PyQt6==6.7.1 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 ope
 ---
 
 ## 📝 版本历史
+
+### 🎉 v2.5.0 (2025-11-30) - 版本源管理与多平台发布
+**重大改进**：
+- 🔄 **统一版本源**
+  - 创建 `VERSION` 文件作为唯一版本源
+  - 所有代码和工作流从 `VERSION` 文件读取版本号
+  - 无需重复修改多个文件，提高维护效率
+  
+- 🚀 **多平台 CI/CD 优化**
+  - 所有工作流已更新为从 `VERSION` 文件读取版本
+  - 支持 4 个构建平台：Windows 11、macOS Intel、macOS ARM64、Linux .deb
+  - 工作流自动创建 GitHub Release
+  - 标签推送后自动触发并行构建
+  
+- 📋 **项目文档完善**
+  - 添加 `PROJECT_NAVIGATION.md` - 项目导航指南
+  - 添加 `PROJECT_COMPLETION_REPORT.md` - 完整项目报告
+  - 添加 `CLEANUP_SUMMARY.md` - 清理总结文档
+  - 所有文档已更新至最新版本
+  
+- 🧹 **项目清理**
+  - 移除 `build-macos-intel.yml`（过时工作流）
+  - 移除 `release_notes.md`（改用 GitHub Releases）
+  - 所有过时文件已清理
+
+**技术细节**:
+- VERSION 文件：集中管理版本号
+- main_window.py：动态读取版本号
+- 工作流：改为从 VERSION 文件提取版本
+- 47+ 单元测试全部通过
+- 4 个活跃的 GitHub Actions 工作流
 
 ### 🎉 v2.4.0 (2025-11-29) - 主窗口精简与图标集成 & PyQt6 升级
 **重大改进**：

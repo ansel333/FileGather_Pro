@@ -18,7 +18,7 @@ jobs:
       - name: Extract version from main file
         id: version
         run: |
-          VERSION=$(grep -oP '文件归集管理器\s+\K\d+\.\d+\.\d+' FileGather_Pro.py || echo "2.4.0")
+          VERSION=$(cat VERSION | tr -d '\n' | tr -d ' ')
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "Detected version: $VERSION"
 
