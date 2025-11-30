@@ -198,15 +198,46 @@ jobs:
         with:
           path: artifacts
 
+      - name: Organize release files
+        run: |
+          # Create release directory
+          mkdir -p release
+          
+          # Copy Windows executable
+          if [ -f "artifacts/FileGather_Pro-Windows-11-Intel/FileGather_Pro.exe" ]; then
+            cp "artifacts/FileGather_Pro-Windows-11-Intel/FileGather_Pro.exe" release/FileGather_Pro.exe
+            echo "✅ Copied Windows executable"
+          fi
+          
+          # Copy macOS Intel executable
+          if [ -f "artifacts/FileGather_Pro-macOS-Intel/FileGather_Pro" ]; then
+            cp "artifacts/FileGather_Pro-macOS-Intel/FileGather_Pro" release/FileGather_Pro-macOS-Intel
+            chmod +x release/FileGather_Pro-macOS-Intel
+            echo "✅ Copied macOS Intel executable"
+          fi
+          
+          # Copy macOS Apple Silicon executable
+          if [ -f "artifacts/FileGather_Pro-macOS-Apple-Silicon/FileGather_Pro" ]; then
+            cp "artifacts/FileGather_Pro-macOS-Apple-Silicon/FileGather_Pro" release/FileGather_Pro-macOS-ARM64
+            chmod +x release/FileGather_Pro-macOS-ARM64
+            echo "✅ Copied macOS Apple Silicon executable"
+          fi
+          
+          # Copy Linux .deb package
+          if [ -f "artifacts/FileGather_Pro-Linux-deb/filegather-pro_"*.deb ]; then
+            cp artifacts/FileGather_Pro-Linux-deb/filegather-pro_*.deb release/
+            echo "✅ Copied Linux .deb package"
+          fi
+          
+          # List all release files
+          echo "Release files ready:"
+          ls -lh release/
+
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            artifacts/**/FileGather_Pro.exe
-            artifacts/**/[Ff]ile[Gg]ather[Pp]ro
-            artifacts/**/filegather-pro
-            artifacts/**/*.deb
+          files: release/*
           draft: false
           prerelease: false
           body: |
