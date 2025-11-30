@@ -1,0 +1,200 @@
+name: Build FileGather_Pro for Linux (.deb)
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-linux-deb:
+    runs-on: ubuntu-22.04
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract version from main file
+        id: version
+        run: |
+          VERSION=$(grep -oP '文件归集管理器\s+\K\d+\.\d+\.\d+' FileGather_Pro.py || echo "2.4.0")
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Detected version: $VERSION"
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            python3-dev \
+            libqt6core6 \
+            libqt6gui6 \
+            libqt6widgets6 \
+            fakeroot \
+            dpkg-dev \
+            devscripts
+
+      - name: Upgrade pip and install Python dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install pyinstaller
+          pip install PyQt6==6.7.1
+          pip install reportlab==4.4.5
+          pip install PyMuPDF==1.26.6
+          pip install python-docx==1.2.0
+          pip install openpyxl==3.1.5
+          pip install Pillow==10.4.0
+
+      - name: Build executable with PyInstaller
+        run: |
+          ICON_FLAG=""
+          if [ -f "app.ico" ]; then
+            ICON_FLAG="--icon app.ico"
+          fi
+          
+          pyinstaller --onefile --windowed \
+            --name filegather-pro \
+            --add-data "components:components" \
+            $ICON_FLAG \
+            --distpath dist \
+            --workpath build \
+            --clean \
+            FileGather_Pro.py
+
+      - name: Create .deb package structure
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          PKGNAME="filegather-pro"
+          PKGVERSION="${VERSION}-1"
+          ARCH="amd64"
+          
+          # Create directory structure
+          mkdir -p deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/bin
+          mkdir -p deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/applications
+          mkdir -p deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/doc/${PKGNAME}
+          mkdir -p deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/DEBIAN
+          
+          # Copy executable
+          cp dist/filegather-pro deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/bin/
+          chmod 755 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/bin/filegather-pro
+          
+          # Create desktop entry
+          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/applications/filegather-pro.desktop << 'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=FileGather Pro
+Comment=Professional file gathering and search management tool
+Exec=filegather-pro
+Icon=filegather-pro
+Categories=Utility;
+Terminal=false
+EOF
+          
+          # Create DEBIAN control file
+          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/DEBIAN/control << EOF
+Package: ${PKGNAME}
+Version: ${PKGVERSION}
+Architecture: ${ARCH}
+Maintainer: ansel333 <ansel333@github.com>
+Description: Professional file gathering and search management tool
+ FileGather Pro is a powerful tool for quickly searching,
+ classifying and managing large amounts of documents.
+ Supports multi-format file search, advanced keyword matching,
+ conflict handling and PDF report generation.
+Homepage: https://github.com/ansel333/FileGather_Pro
+EOF
+          
+          # Create changelog
+          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/doc/${PKGNAME}/changelog.gz << 'EOF'
+EOF
+          
+          # Create copyright file
+          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/doc/${PKGNAME}/copyright << 'EOF'
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: FileGather_Pro
+Upstream-Contact: ansel333 <ansel333@github.com>
+Source: https://github.com/ansel333/FileGather_Pro
+
+Files: *
+Copyright: 2024-2025 ansel333
+License: Apache-2.0
+
+License: Apache-2.0
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ .
+ http://www.apache.org/licenses/LICENSE-2.0
+ .
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+EOF
+          
+          # Set permissions
+          chmod 755 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/DEBIAN
+          chmod 644 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/DEBIAN/control
+          
+          # Build .deb package
+          cd deb_build
+          fakeroot dpkg-deb --build ${PKGNAME}_${PKGVERSION}_${ARCH}
+          cd ..
+          
+          # Move to output directory
+          mkdir -p output
+          cp deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}.deb output/
+          echo "✅ Created ${PKGNAME}_${PKGVERSION}_${ARCH}.deb"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FileGather_Pro-${{ steps.version.outputs.VERSION }}-Linux-deb
+          path: output/filegather-pro_*_amd64.deb
+          retention-days: 30
+
+      - name: Create release info
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          BUILD_DATE=$(date -u +'%Y-%m-%d %H:%M:%S UTC')
+          cat > output/BUILD_INFO.txt << EOF
+          Build Information
+          =================
+          Version: $VERSION
+          Platform: Linux (Ubuntu 22.04 LTS)
+          Build Date: $BUILD_DATE
+          Python Version: 3.11
+          PyQt6 Version: 6.7.1
+          Architecture: amd64 (x86_64)
+          Package Format: .deb
+          
+          Installation:
+          sudo dpkg -i filegather-pro_${VERSION}-1_amd64.deb
+          
+          Usage:
+          filegather-pro
+          
+          Uninstallation:
+          sudo apt remove filegather-pro
+EOF
+          cat output/BUILD_INFO.txt
+
+      - name: Create Release (on tag)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            output/filegather-pro_*_amd64.deb
+            output/BUILD_INFO.txt
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

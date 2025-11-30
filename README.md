@@ -30,10 +30,13 @@
 - 中文字体支持
 
 ### 🎨 用户界面
-- 现代化 PyQt5 界面
+- 现代化 PyQt6 界面（6.7.1）
+- 白色背景+彩色边框按钮设计
+- 单行紧凑按钮布局
 - 即时搜索结果预览
 - 右键上下文菜单
 - 进度提示和状态反馈
+- 条件可见的取消按钮
 
 ---
 
@@ -74,12 +77,15 @@ pip install -r requirements-test.txt
 
 ### Running Tests
 ```bash
-# Run all core tests (43 tests passing)
+# Run all tests (47+ tests passing)
 $env:QT_QPA_PLATFORM='offscreen'
-python -m pytest tests/test_search_logic.py tests/test_functions.py -v
+python -m pytest tests/ -v
 
-# Run specific test file
-python -m pytest tests/test_search_logic.py -v
+# Run specific test categories
+python -m pytest tests/test_file_operations.py -v    # File/folder operations (11 tests)
+python -m pytest tests/test_pyqt6_dialogs.py -v      # PyQt6 enum handling (12 tests)
+python -m pytest tests/test_gather_mode_routing.py -v # Gather mode routing (14 tests)
+python -m pytest tests/test_search_logic.py -v       # Search logic (20 tests)
 
 # Run with coverage report
 python -m pytest tests/ --cov=components --cov-report=html
@@ -95,10 +101,12 @@ python run_tests.py list          # List all available tests
 ```
 
 ### Test Coverage
+- **11 tests** in `test_file_operations.py` - File/folder copy, delete, batch operations, hash calculation
+- **12 tests** in `test_pyqt6_dialogs.py` - PyQt6 enum handling, dialog return values, button combinations
+- **14 tests** in `test_gather_mode_routing.py` - File vs folder mode routing, conditional logic, operations
 - **20 tests** in `test_search_logic.py` - Exact match, keyword matching, content search
-- **23 tests** in `test_functions.py` - Folder manager, search manager, results manager, error handling
-- **43+ total tests** passing with 100% coverage for core functionality
-- Environment: Python 3.11.9, pytest 7.4.3
+- **47+ total tests** passing with comprehensive coverage
+- Environment: Python 3.11.9, pytest 7.4.3, PyQt6 6.7.1
 
 ---
 
@@ -134,7 +142,7 @@ FileGather_Pro/
 │   │   ├── ui_interactions.py       # UI交互
 │   │   └── README.md
 │   └── README.md
-├── tests/                           # 测试套件（24 个测试）
+├── tests/                           # 测试套件（47+ 个测试）
 ├── archive/                         # 旧版本归档
 ├── ai-workflow/                     # 工作流文档
 ├── .github/workflows/               # GitHub Actions CI/CD
@@ -152,7 +160,7 @@ FileGather_Pro/
 - ✅ **85% 代码精简** - 主窗口从 1090 行减至 167 行
 - ✅ **专业图标** - 256×256 多分辨率图标集成
 - ✅ **自动化构建** - GitHub Actions CI/CD 工作流
-- ✅ **完整测试** - 24 个测试用例全部通过
+- ✅ **完整测试** - 47+ 个测试用例全部通过
 
 ---
 
@@ -160,7 +168,7 @@ FileGather_Pro/
 
 | 库 | 用途 |
 |----|------|
-| **PyQt5** | GUI 框架 |
+| **PyQt6** | GUI 框架 (6.7.1) |
 | **reportlab** | PDF 生成 |
 | **PyMuPDF** | PDF 内容提取 |
 | **python-docx** | Word 文件处理 |
@@ -169,7 +177,7 @@ FileGather_Pro/
 
 ### 安装依赖
 ```bash
-pip install PyQt5==5.15.11 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 openpyxl==3.1.5 Pillow==10.4.0
+pip install PyQt6==6.7.1 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 openpyxl==3.1.5 Pillow==10.4.0
 ```
 
 ### 从可执行文件运行（推荐）
@@ -207,7 +215,7 @@ pip install PyQt5==5.15.11 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 o
 
 ## 📝 版本历史
 
-### 🎉 v2.4.0 (2025-11-29) - 主窗口精简与图标集成
+### 🎉 v2.4.0 (2025-11-29) - 主窗口精简与图标集成 & PyQt6 升级
 **重大改进**：
 - 🔧 **主窗口重构**：代码行数从 1090 行精简至 167 行（-85%）
   - 删除 29 个重复方法
@@ -218,6 +226,21 @@ pip install PyQt5==5.15.11 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 o
   - 集成 256×256 多分辨率应用图标
   - 在 File Explorer、Start Menu、Taskbar 中完美显示
   - PyInstaller 自动嵌入图标到可执行文件
+  
+- 🔧 **PyQt6 升级**
+  - 升级框架从 PyQt5 5.15.11 到 PyQt6 6.7.1
+  - 修复 20+ PyQt6 枚举常数（AlignmentFlag、ItemDataRole、SelectionMode 等）
+  - 更新对话框 exec() 调用和 StandardButton 枚举
+  - 优化按钮样式：白色背景 + 彩色边框 + 悬停效果
+  - 添加条件可见的取消按钮（搜索时显示）
+  
+- 📝 **测试覆盖增强**
+  - 添加 11 个文件/文件夹操作测试
+  - 添加 12 个 PyQt6 枚举处理测试
+  - 添加 14 个 gather_mode 路由测试
+  - 总计 47+ 单元测试，全部通过
+  - 验证文件夹复制/删除功能
+  - 验证条件路由逻辑
   
 - 🔄 **工作流优化**
   - GitHub Actions 工作流自动化构建带图标的 EXE
@@ -230,9 +253,11 @@ pip install PyQt5==5.15.11 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 o
   - 保留生产必需的核心文件
   - 工作区精简化
 
-**技术细节**：
+**技术细节**:
 - components/main_window.py：167 行（框架代码）
 - components/functions/：28+ 个业务逻辑函数
+- PyQt6 6.7.1 框架升级（从 5.15.11）
+- 47+ 单元测试，comprehensive coverage
 - PyInstaller v6.17.0 配置
 - GitHub Actions Windows 11 自动构建
 
@@ -310,14 +335,36 @@ pip install PyQt5==5.15.11 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 o
 
 ## 📦 获取可执行文件
 
-### GitHub Release 下载
-前往 [Releases](https://github.com/ansel333/FileGather_Pro/releases) 页面下载最新版本的 `FileGather_Pro.exe`
+### 多平台支持
+FileGather Pro 现已支持以下平台的自动构建：
+- ✅ **Windows 11** (Intel x64)
+- ✅ **macOS** (Intel x86_64 和 Apple Silicon ARM64)
+- ✅ **Linux** (Ubuntu/Debian .deb 包)
 
-**v2.4.0 特点**：
+### GitHub Release 下载
+前往 [Releases](https://github.com/ansel333/FileGather_Pro/releases) 页面下载最新版本的可执行文件
+
+**v2.4.0+ 特点**：
+- ✅ 跨平台支持（Windows、macOS、Linux）
 - ✅ 包含自定义应用图标
 - ✅ 优化的代码结构（-85% 代码）
 - ✅ 完整的功能特性
 - ✅ 无需 Python 环境即可运行
+
+#### Windows
+直接运行 `FileGather_Pro.exe`
+
+#### macOS
+```bash
+chmod +x FileGather_Pro
+./FileGather_Pro
+```
+
+#### Linux (Debian/Ubuntu)
+```bash
+sudo dpkg -i filegather-pro_*.deb
+filegather-pro
+```
 
 ---
 
@@ -343,7 +390,7 @@ pip install PyQt5==5.15.11 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 o
 ## 🙏 致谢
 
 感谢以下开源项目的支持：
-- [PyQt5](https://www.riverbankcomputing.com/software/pyqt/) - GUI 框架
+- [PyQt6](https://www.riverbankcomputing.com/software/pyqt/) - GUI 框架 (6.7.1)
 - [PyInstaller](https://www.pyinstaller.org/) - 可执行文件构建
 - [ReportLab](https://www.reportlab.com/) - PDF 生成
 - [PyMuPDF](https://pymupdf.readthedocs.io/) - PDF 处理

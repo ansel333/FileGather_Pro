@@ -1,0 +1,236 @@
+name: Build FileGather_Pro (All Platforms)
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract version
+        id: version
+        run: |
+          $content = Get-Content FileGather_Pro.py -Raw
+          $match = $content | Select-String -Pattern '文件归集管理器\s+(\d+\.\d+\.\d+)'
+          if ($match) {
+            $version = $match.Matches[0].Groups[1].Value
+          } else {
+            $version = "2.4.0"
+          }
+          echo "VERSION=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          architecture: 'x64'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller PyQt6==6.7.1 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 openpyxl==3.1.5 Pillow==10.4.0
+
+      - name: Prepare icon
+        run: |
+          if (-Not (Test-Path "app.ico")) {
+            if (Test-Path "large.ico") {
+              python -c "from PIL import Image; img = Image.open('large.ico'); img.save('app.ico', 'ICO'); print('✅ Generated app.ico')"
+            }
+          }
+
+      - name: Build Windows executable
+        run: |
+          pyinstaller --onefile --windowed --name FileGather_Pro --add-data "components;components" --icon app.ico --distpath dist --workpath build --clean FileGather_Pro.py
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FileGather_Pro-Windows-11-Intel
+          path: dist/FileGather_Pro.exe
+          retention-days: 30
+
+  build-macos:
+    strategy:
+      matrix:
+        include:
+          - os: macos-12
+            arch: x86_64
+            platform: Intel
+          - os: macos-14
+            arch: arm64
+            platform: Apple-Silicon
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract version
+        id: version
+        run: |
+          VERSION=$(grep -oP '文件归集管理器\s+\K\d+\.\d+\.\d+' FileGather_Pro.py || echo "2.4.0")
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install pyinstaller PyQt6==6.7.1 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 openpyxl==3.1.5 Pillow==10.4.0
+
+      - name: Build macOS executable
+        run: |
+          ICON_FLAG=""
+          [ -f "app.ico" ] && ICON_FLAG="--icon app.ico"
+          pyinstaller --onefile --windowed --name FileGather_Pro --add-data "components:components" $ICON_FLAG --distpath dist --workpath build --clean FileGather_Pro.py
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FileGather_Pro-macOS-${{ matrix.platform }}
+          path: dist/FileGather_Pro
+          retention-days: 30
+
+  build-linux:
+    runs-on: ubuntu-22.04
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract version
+        id: version
+        run: |
+          VERSION=$(grep -oP '文件归集管理器\s+\K\d+\.\d+\.\d+' FileGather_Pro.py || echo "2.4.0")
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential python3-dev libqt6core6 libqt6gui6 libqt6widgets6 fakeroot dpkg-dev devscripts
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install pyinstaller PyQt6==6.7.1 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 openpyxl==3.1.5 Pillow==10.4.0
+
+      - name: Build Linux executable
+        run: |
+          ICON_FLAG=""
+          [ -f "app.ico" ] && ICON_FLAG="--icon app.ico"
+          pyinstaller --onefile --windowed --name filegather-pro --add-data "components:components" $ICON_FLAG --distpath dist --workpath build --clean FileGather_Pro.py
+
+      - name: Create .deb package
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          PKGNAME="filegather-pro"
+          PKGVERSION="${VERSION}-1"
+          ARCH="amd64"
+          
+          mkdir -p deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/{usr/bin,usr/share/applications,usr/share/doc/${PKGNAME},DEBIAN}
+          cp dist/filegather-pro deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/bin/
+          chmod 755 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/bin/filegather-pro
+          
+          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/applications/filegather-pro.desktop << 'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=FileGather Pro
+Comment=Professional file gathering and search management tool
+Exec=filegather-pro
+Icon=filegather-pro
+Categories=Utility;
+Terminal=false
+EOF
+          
+          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/DEBIAN/control << EOF
+Package: ${PKGNAME}
+Version: ${PKGVERSION}
+Architecture: ${ARCH}
+Maintainer: ansel333 <ansel333@github.com>
+Description: Professional file gathering and search management tool
+ FileGather Pro is a powerful tool for quickly searching,
+ classifying and managing large amounts of documents.
+Homepage: https://github.com/ansel333/FileGather_Pro
+EOF
+          
+          chmod 755 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/DEBIAN
+          chmod 644 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/DEBIAN/control
+          
+          cd deb_build
+          fakeroot dpkg-deb --build ${PKGNAME}_${PKGVERSION}_${ARCH}
+          cd ..
+          
+          mkdir -p output
+          cp deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}.deb output/
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FileGather_Pro-Linux-deb
+          path: output/filegather-pro_*_amd64.deb
+          retention-days: 30
+
+  create-release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [build-windows, build-macos, build-linux]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/FileGather_Pro-Windows-11-Intel/FileGather_Pro.exe
+            artifacts/FileGather_Pro-macOS-Intel/FileGather_Pro
+            artifacts/FileGather_Pro-macOS-Apple-Silicon/FileGather_Pro
+            artifacts/FileGather_Pro-Linux-deb/filegather-pro_*.deb
+          draft: false
+          prerelease: false
+          body: |
+            # FileGather Pro Release
+            
+            Multi-platform executable packages:
+            - **Windows 11 (Intel x64)**: FileGather_Pro.exe
+            - **macOS (Intel x86_64)**: FileGather_Pro
+            - **macOS (Apple Silicon ARM64)**: FileGather_Pro
+            - **Linux (Ubuntu/Debian x64)**: filegather-pro_*.deb
+            
+            ## Installation Instructions
+            
+            ### Windows
+            Simply run the .exe file.
+            
+            ### macOS
+            ```bash
+            chmod +x FileGather_Pro
+            ./FileGather_Pro
+            ```
+            
+            ### Linux (Debian/Ubuntu)
+            ```bash
+            sudo dpkg -i filegather-pro_*.deb
+            filegather-pro
+            ```
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
