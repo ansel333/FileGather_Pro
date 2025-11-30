@@ -139,7 +139,7 @@ jobs:
           cp dist/filegather-pro deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/bin/
           chmod 755 deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/bin/filegather-pro
           
-          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/applications/filegather-pro.desktop << 'EOF'
+          cat > deb_build/${PKGNAME}_${PKGVERSION}_${ARCH}/usr/share/applications/filegather-pro.desktop << EOF
 [Desktop Entry]
 Version=1.0
 Type=Application
