@@ -55,7 +55,7 @@ class KeywordSearchResultDialog(QDialog):
         layout.addWidget(self.results_tree)
 
         # 确定按钮
-        button_box = QDialogButtonBox(QDialogButtonBox.Ok)
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok)
         button_box.accepted.connect(self.accept)
         layout.addWidget(button_box)
 

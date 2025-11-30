@@ -208,6 +208,8 @@ pip install PyQt6==6.7.1 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 ope
 - **REFACTORING.md** - 重构详细说明和架构设计
 - **DIALOGS_REFACTORING.md** - 对话框包拆分说明
 - **QUICK_REFERENCE.md** - 快速参考指南
+- **.github/WORKFLOWS_GUIDE.md** - 详细的 CI/CD 工作流指南
+- **.github/BUILD_GUIDE.md** - 多平台构建快速参考
 - **components/README.md** - 模块结构说明
 - **components/dialogs/README.md** - 对话框包说明
 
@@ -242,11 +244,11 @@ pip install PyQt6==6.7.1 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 ope
   - 验证文件夹复制/删除功能
   - 验证条件路由逻辑
   
-- 🔄 **工作流优化**
-  - GitHub Actions 工作流自动化构建带图标的 EXE
-  - 动态版本提取（从代码注释）
-  - 自动生成 BUILD_INFO.txt
-  - 支持一键发布到 GitHub Release
+- 🔄 **多平台构建优化**
+  - Windows 11 (Intel x64) 自动构建
+  - macOS Intel x86_64 和 Apple Silicon ARM64 并行构建
+  - Linux 创建 .deb 安装包
+  - 标签发布时自动创建 GitHub Release
   
 - 📦 **项目清理**
   - 移除临时构建文件和脚本
