@@ -42,30 +42,29 @@ A powerful file management tool for quickly searching, categorizing, and managin
 
 ---
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 运行程序
+### Run the Program
 ```bash
 python FileGather_Pro.py
 ```
 
-### 或使用可执行文件
+### Or Use Executable File
 ```bash
-FileGather_Pro.exe  # Windows 可执行文件（包含自定义图标）
+FileGather_Pro.exe  # Windows executable (includes custom icon)
 ```
 
-### 基本使用流程
-1. **启动程序**：运行主程序文件启动应用
-2. **添加搜索文件夹**：点击"添加文件夹"按钮选择要搜索的目录
-3. **输入搜索条件**：输入关键词或文件名
-4. **选择搜索类型**：
-   - 🔍 **模糊查找**：搜索包含关键词的文件（支持高级语法）
-   - ✓ **精确查找**：搜索文件名完全匹配的文件
-5. **开始搜索**：点击对应的搜索按钮
-6. **查看结果**：搜索结果显示在下方表格中
-7. **处理文件**：右键或使用按钮进行复制、删除等操作
-6. **处理搜索结果**：右键查看文件选项（打开、打开文件夹、复制、删除）
-7. **生成报告**：点击"生成 PDF 日志"导出操作记录
+### Basic Usage Flow
+1. **Start the program**: Run the main program file to launch the application
+2. **Add search folders**: Click "Add Folder" button to select directories to search
+3. **Enter search criteria**: Input keywords or filename
+4. **Choose search type**:
+   - 🔍 **Fuzzy Search**: Search for files containing keywords (supports advanced syntax)
+   - ✓ **Exact Search**: Search for files with exact filename match
+5. **Start search**: Click the corresponding search button
+6. **View results**: Search results display in the table below
+7. **Handle files**: Right-click or use buttons for copy, delete, and other operations
+8. **Generate report**: Click "Generate PDF Log" to export operation records
 
 ---
 
@@ -112,282 +111,282 @@ python run_tests.py list          # List all available tests
 
 ---
 
-## 📦 项目结构
+## 📦 Project Structure
 
-### v2.4.0 架构（模块化 + 功能扩展 + 自动化构建）
+### v2.4.0 Architecture (Modular + Feature Extension + Automated Build)
 
 ```
 FileGather_Pro/
-├── FileGather_Pro.py                # 应用入口（v2.4.0）
-├── FileGather_Pro.spec              # PyInstaller 配置
-├── app.ico                          # 应用程序图标（256×256）
-├── components/                      # 核心模块包
+├── FileGather_Pro.py                # Application entry point (v2.5.0)
+├── FileGather_Pro.spec              # PyInstaller configuration
+├── app.ico                          # Application icon (256×256)
+├── components/                      # Core modules package
 │   ├── __init__.py
-│   ├── main_window.py               # 主窗口类（167行，-85%）
-│   ├── ui_builder.py                # UI构建器
-│   ├── search_logic.py              # 搜索逻辑
-│   ├── file_operations.py           # 文件操作
-│   ├── utils.py                     # 工具函数
-│   ├── dialogs/                     # 对话框子包
+│   ├── main_window.py               # Main window class (167 lines, -85%)
+│   ├── ui_builder.py                # UI builder
+│   ├── search_logic.py              # Search logic
+│   ├── file_operations.py           # File operations
+│   ├── utils.py                     # Utility functions
+│   ├── dialogs/                     # Dialogs sub-package
 │   │   ├── __init__.py
-│   │   ├── search_result_dialog.py  # 搜索结果对话框
-│   │   ├── conflict_dialog.py       # 冲突处理对话框
-│   │   ├── pdf_generator.py         # PDF生成器
+│   │   ├── search_result_dialog.py  # Search result dialog
+│   │   ├── conflict_dialog.py       # Conflict handling dialog
+│   │   ├── pdf_generator.py         # PDF generator
 │   │   └── README.md
-│   ├── functions/                   # 业务逻辑模块（28+ 函数）
+│   ├── functions/                   # Business logic modules (28+ functions)
 │   │   ├── __init__.py
-│   │   ├── folder_manager.py        # 文件夹管理
-│   │   ├── search_manager.py        # 搜索管理
-│   │   ├── results_manager.py       # 结果管理
-│   │   ├── search_operations.py     # 搜索操作
-│   │   ├── file_operations_ui.py    # UI文件操作
-│   │   ├── ui_interactions.py       # UI交互
+│   │   ├── folder_manager.py        # Folder management
+│   │   ├── search_manager.py        # Search management
+│   │   ├── results_manager.py       # Results management
+│   │   ├── search_operations.py     # Search operations
+│   │   ├── file_operations_ui.py    # UI file operations
+│   │   ├── ui_interactions.py       # UI interactions
 │   │   └── README.md
 │   └── README.md
-├── tests/                           # 测试套件（47+ 个测试）
-├── archive/                         # 旧版本归档
-├── ai-workflow/                     # 工作流文档
+├── tests/                           # Test suite (47+ tests)
+├── archive/                         # Old version archives
+├── ai-workflow/                     # Workflow documentation
 ├── .github/workflows/               # GitHub Actions CI/CD
-│   └── build-windows-11-intel.yml   # Windows 自动构建
-├── .gitignore                       # Git忽略配置
-├── LICENSE                          # Apache 2.0 许可证
-└── README.md                        # 项目说明
+│   └── build-all-platforms.yml      # Multi-platform automated build
+├── .gitignore                       # Git ignore configuration
+├── LICENSE                          # Apache 2.0 license
+└── README.md                        # Project documentation
 ```
 
-### 架构特点
-- ✅ **单一职责原则** - 每个模块专注一个功能
-- ✅ **低耦合** - 模块之间独立，易于测试
-- ✅ **高内聚** - 相关功能集中在同一模块
-- ✅ **易扩展** - 添加新功能只需新增模块
-- ✅ **85% 代码精简** - 主窗口从 1090 行减至 167 行
-- ✅ **专业图标** - 256×256 多分辨率图标集成
-- ✅ **自动化构建** - GitHub Actions CI/CD 工作流
-- ✅ **完整测试** - 47+ 个测试用例全部通过
+### Architecture Features
+- ✅ **Single Responsibility Principle** - Each module focuses on one function
+- ✅ **Low Coupling** - Modules are independent and easy to test
+- ✅ **High Cohesion** - Related functionality concentrated in same module
+- ✅ **Easy Extension** - Add new features by creating new modules
+- ✅ **85% Code Reduction** - Main window reduced from 1090 to 167 lines
+- ✅ **Professional Icon** - 256×256 multi-resolution icon integration
+- ✅ **Automated Build** - GitHub Actions CI/CD workflow
+- ✅ **Complete Tests** - 47+ test cases all passing
 
 ---
 
-## 🔧 依赖库
+## 🔧 Dependencies
 
-| 库 | 用途 |
-|----|------|
-| **PyQt6** | GUI 框架 (6.7.1) |
-| **reportlab** | PDF 生成 |
-| **PyMuPDF** | PDF 内容提取 |
-| **python-docx** | Word 文件处理 |
-| **openpyxl** | Excel 文件处理 |
-| **Pillow** | 图像处理和图标生成 |
+| Package | Purpose |
+|---------|---------|
+| **PyQt6** | GUI framework (6.7.1) |
+| **reportlab** | PDF generation |
+| **PyMuPDF** | PDF content extraction |
+| **python-docx** | Word file processing |
+| **openpyxl** | Excel file processing |
+| **Pillow** | Image processing and icon generation |
 
-### 安装依赖
+### Install Dependencies
 ```bash
 pip install PyQt6==6.7.1 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 openpyxl==3.1.5 Pillow==10.4.0
 ```
 
-### 从可执行文件运行（推荐）
+### Run from Executable File (Recommended)
 ```bash
-# 无需安装任何依赖，直接运行
+# No dependencies needed, run directly
 ./FileGather_Pro.exe
 ```
 
 ---
 
-## 🚨 注意事项
+## 🚨 Important Notes
 
-### 性能建议
-- 大规模搜索：先通过文件名过滤
-- 内容搜索：比文件名搜索耗时更长，请耐心等待
-- 网络路径：速度可能较慢，建议先映射本地驱动器
+### Performance Recommendations
+- Large-scale search: Filter by filename first
+- Content search: More time-consuming than filename search, please be patient
+- Network paths: May be slower, recommend mapping to local drive first
 
-### 安全提示
-- ⚠️ 删除操作**不可撤销**，请确认后再执行
-- ⚠️ 仅用于合法的文件管理操作
-- ⚠️ 避免对系统文件或受保护文件进行不当操作
-- ⚠️ 建议定期备份重要文件
-
----
-
-## 📚 文档
-
-- **REFACTORING.md** - 重构详细说明和架构设计
-- **DIALOGS_REFACTORING.md** - 对话框包拆分说明
-- **QUICK_REFERENCE.md** - 快速参考指南
-- **.github/WORKFLOWS_GUIDE.md** - 详细的 CI/CD 工作流指南
-- **.github/BUILD_GUIDE.md** - 多平台构建快速参考
-- **components/README.md** - 模块结构说明
-- **components/dialogs/README.md** - 对话框包说明
+### Security Tips
+- ⚠️ Delete operations are **irreversible**, please confirm before executing
+- ⚠️ Only use for legitimate file management operations
+- ⚠️ Avoid improper operations on system files or protected files
+- ⚠️ Regular backup of important files recommended
 
 ---
 
-## 📝 版本历史
+## 📚 Documentation
 
-### 🎉 v2.5.0 (2025-11-30) - 版本源管理与多平台发布
-**重大改进**：
-- 🔄 **统一版本源**
-  - 创建 `VERSION` 文件作为唯一版本源
-  - 所有代码和工作流从 `VERSION` 文件读取版本号
-  - 无需重复修改多个文件，提高维护效率
-  
-- 🚀 **多平台 CI/CD 优化**
-  - 所有工作流已更新为从 `VERSION` 文件读取版本
-  - 支持 4 个构建平台：Windows 11、macOS Intel、macOS ARM64、Linux .deb
-  - 工作流自动创建 GitHub Release
-  - 标签推送后自动触发并行构建
-  
-- 📋 **项目文档完善**
-  - 添加 `PROJECT_NAVIGATION.md` - 项目导航指南
-  - 添加 `PROJECT_COMPLETION_REPORT.md` - 完整项目报告
-  - 添加 `CLEANUP_SUMMARY.md` - 清理总结文档
-  - 所有文档已更新至最新版本
-  
-- 🧹 **项目清理**
-  - 移除 `build-macos-intel.yml`（过时工作流）
-  - 移除 `release_notes.md`（改用 GitHub Releases）
-  - 所有过时文件已清理
+- **REFACTORING.md** - Detailed refactoring and architecture design
+- **DIALOGS_REFACTORING.md** - Dialog package splitting documentation
+- **QUICK_REFERENCE.md** - Quick reference guide
+- **.github/WORKFLOWS_GUIDE.md** - Detailed CI/CD workflow guide
+- **.github/BUILD_GUIDE.md** - Multi-platform build quick reference
+- **components/README.md** - Module structure documentation
+- **components/dialogs/README.md** - Dialogs package documentation
 
-**技术细节**:
-- VERSION 文件：集中管理版本号
-- main_window.py：动态读取版本号
-- 工作流：改为从 VERSION 文件提取版本
-- 47+ 单元测试全部通过
-- 4 个活跃的 GitHub Actions 工作流
+---
 
-### 🎉 v2.4.0 (2025-11-29) - 主窗口精简与图标集成 & PyQt6 升级
-**重大改进**：
-- 🔧 **主窗口重构**：代码行数从 1090 行精简至 167 行（-85%）
-  - 删除 29 个重复方法
-  - 提取全部业务逻辑到 functions/ 模块
-  - 保留 5 个核心框架方法
-  
-- 🎨 **专业图标集成**
-  - 集成 256×256 多分辨率应用图标
-  - 在 File Explorer、Start Menu、Taskbar 中完美显示
-  - PyInstaller 自动嵌入图标到可执行文件
-  
-- 🔧 **PyQt6 升级**
-  - 升级框架从 PyQt5 5.15.11 到 PyQt6 6.7.1
-  - 修复 20+ PyQt6 枚举常数（AlignmentFlag、ItemDataRole、SelectionMode 等）
-  - 更新对话框 exec() 调用和 StandardButton 枚举
-  - 优化按钮样式：白色背景 + 彩色边框 + 悬停效果
-  - 添加条件可见的取消按钮（搜索时显示）
-  
-- 📝 **测试覆盖增强**
-  - 添加 11 个文件/文件夹操作测试
-  - 添加 12 个 PyQt6 枚举处理测试
-  - 添加 14 个 gather_mode 路由测试
-  - 总计 47+ 单元测试，全部通过
-  - 验证文件夹复制/删除功能
-  - 验证条件路由逻辑
-  
-- 🔄 **多平台构建优化**
-  - Windows 11 (Intel x64) 自动构建
-  - macOS Intel x86_64 和 Apple Silicon ARM64 并行构建
-  - Linux 创建 .deb 安装包
-  - 标签发布时自动创建 GitHub Release
-  
-- 📦 **项目清理**
-  - 移除临时构建文件和脚本
-  - 保留生产必需的核心文件
-  - 工作区精简化
+## 📝 Version History
 
-**技术细节**:
-- components/main_window.py：167 行（框架代码）
-- components/functions/：28+ 个业务逻辑函数
-- PyQt6 6.7.1 框架升级（从 5.15.11）
-- 47+ 单元测试，comprehensive coverage
-- PyInstaller v6.17.0 配置
-- GitHub Actions Windows 11 自动构建
-
-### ✨ v2.3.5.1 (2025-11-29) - 精确查找功能
-**新增功能**：
-- 🎯 **精确查找模式**
-  - 新增"✓ 精确查找"按钮，支持文件名严格匹配
-  - 精确查找忽略文件扩展名，只匹配文件名主体
-  - 例如：关键词"报告"只会匹配"报告.xlsx"、"报告.pdf"等，不会匹配"年度报告.docx"
-
-- 🎨 **UI 优化**
-  - 重新排布按钮为三行布局，更加美观直观
-  - 第一行：🔍 模糊查找 | ✓ 精确查找 | ⏹ 取消搜索
-  - 第二行：📂 选择目标 | 📋 开始归集 | 🗑 删除原文
-  - 第三行：📄 生成日志 | ❓ 使用说明
-  - 添加工具提示（Tooltips）说明各按钮功能
-
-- 🔍 **搜索逻辑改进**
-  - `search_logic.py` 添加 `exact_match_filename()` 函数
-  - 精确查找使用专门的匹配逻辑，不支持高级语法（仅基本关键词）
-  - 模糊查找保持所有高级功能（逻辑与/或、排除、通配符等）
-
-**技术改进**：
-- 拆分搜索逻辑：`start_search()` 处理模糊查找，`start_exact_search()` 处理精确查找
-- 代码复用：共享文件遍历、大小/日期筛选等逻辑
-
-### 🎯 v2.3.5 (2025-11-29) - 完整模块化重构
-**主要改进**：
-- ✨ **架构重构**：1686行单文件 → 模块化结构
-  - 平均文件大小 340 行，便于维护
-  - 单一职责原则，清晰的模块边界
+### 🎉 v2.5.0 (2025-11-30) - Unified Version Management & Multi-Platform Release
+**Major Improvements**:
+- 🔄 **Unified Version Source**
+  - Created `VERSION` file as the single source of truth
+  - All code and workflows read version from `VERSION` file
+  - No need to modify multiple files, improving maintenance efficiency
   
-- 📦 **dialogs 包细化**：拆分为多个专业模块
-  - `search_result_dialog.py` - 搜索结果展示（60行）
-  - `conflict_dialog.py` - 冲突处理（200行）
-  - `pdf_generator.py` - PDF 报告生成（210行）
+- 🚀 **Multi-Platform CI/CD Optimization**
+  - All workflows updated to read version from `VERSION` file
+  - Support 4 build platforms: Windows 11, macOS Intel, macOS ARM64, Linux .deb
+  - Workflows automatically create GitHub Release
+  - Tag push automatically triggers parallel builds
   
-- 📚 **文档完善**：
-  - REFACTORING.md - 重构详细说明
-  - DIALOGS_REFACTORING.md - 对话框拆分报告
-  - components/README.md - 模块结构说明
-  - QUICK_REFERENCE.md - 快速参考指南
+- 📋 **Project Documentation Enhancement**
+  - Added `PROJECT_NAVIGATION.md` - Project navigation guide
+  - Added `PROJECT_COMPLETION_REPORT.md` - Complete project report
+  - Added `CLEANUP_SUMMARY.md` - Cleanup summary document
+  - All documentation updated to latest version
   
-- 🏗️ **项目整理**：
-  - 创建 archive 文件夹归档旧版本
-  - 添加 .gitignore 文件（支持 Python、IDE、编译产物）
-  - 清理 build/ 和 dist/ 目录
+- 🧹 **Project Cleanup**
+  - Removed duplicate specialized workflows (consolidated to build-all-platforms.yml)
+  - Removed obsolete workflow configurations
+  - All outdated files cleaned up
+
+**Technical Details**:
+- VERSION file: Centralized version management
+- main_window.py: Dynamic version reading
+- Workflows: Changed to extract version from VERSION file
+- 47+ unit tests all passing
+- 1 unified GitHub Actions workflow
+
+### 🎉 v2.4.0 (2025-11-29) - Main Window Simplification & Icon Integration & PyQt6 Upgrade
+**Major Improvements**:
+- 🔧 **Main Window Refactoring**: Code reduced from 1090 to 167 lines (-85%)
+  - Removed 29 duplicate methods
+  - Extracted all business logic to functions/ module
+  - Retained 5 core framework methods
+  
+- 🎨 **Professional Icon Integration**
+  - Integrated 256×256 multi-resolution application icon
+  - Perfect display in File Explorer, Start Menu, Taskbar
+  - PyInstaller automatically embeds icon in executable
+  
+- 🔧 **PyQt6 Upgrade**
+  - Upgraded framework from PyQt5 5.15.11 to PyQt6 6.7.1
+  - Fixed 20+ PyQt6 enum constants (AlignmentFlag, ItemDataRole, SelectionMode, etc.)
+  - Updated dialog exec() calls and StandardButton enums
+  - Optimized button styles: white background + colored border + hover effects
+  - Added conditional visibility cancel button (visible during search)
+  
+- 📝 **Enhanced Test Coverage**
+  - Added 11 file/folder operation tests
+  - Added 12 PyQt6 enum handling tests
+  - Added 14 gather_mode routing tests
+  - Total 47+ unit tests, all passing
+  - Verified folder copy/delete functionality
+  - Verified conditional routing logic
+  
+- 🔄 **Multi-Platform Build Optimization**
+  - Windows 11 (Intel x64) automated build
+  - macOS Intel x86_64 and Apple Silicon ARM64 parallel builds
+  - Linux creates .deb installation package
+  - Automatic GitHub Release creation on tag push
+  
+- 📦 **Project Cleanup**
+  - Removed temporary build files and scripts
+  - Retained only production-necessary core files
+  - Workspace streamlined
+
+**Technical Details**:
+- components/main_window.py: 167 lines (framework code)
+- components/functions/: 28+ business logic functions
+- PyQt6 6.7.1 framework upgrade (from 5.15.11)
+- 47+ unit tests, comprehensive coverage
+- PyInstaller v6.17.0 configuration
+- GitHub Actions multi-platform automated build
+
+### ✨ v2.3.5.1 (2025-11-29) - Exact Search Feature
+**New Features**:
+- 🎯 **Exact Search Mode**
+  - New "✓ Exact Search" button supporting strict filename matching
+  - Exact search ignores file extensions, matches only filename body
+  - Example: Keyword "report" only matches "report.xlsx", "report.pdf", etc., not "annual_report.docx"
+
+- 🎨 **UI Optimization**
+  - Rearranged buttons to three-row layout, more intuitive
+  - Row 1: 🔍 Fuzzy Search | ✓ Exact Search | ⏹ Cancel Search
+  - Row 2: 📂 Select Target | 📋 Start Gather | 🗑 Delete Original
+  - Row 3: 📄 Generate Log | ❓ Instructions
+  - Added tooltips explaining button functions
+
+- 🔍 **Search Logic Improvements**
+  - Added `exact_match_filename()` function in `search_logic.py`
+  - Exact search uses dedicated matching logic, no advanced syntax support (basic keywords only)
+  - Fuzzy search retains all advanced features (AND/OR logic, exclusion, wildcards, etc.)
+
+**Technical Improvements**:
+- Split search logic: `start_search()` handles fuzzy search, `start_exact_search()` handles exact search
+- Code reuse: Shared file traversal, size/date filtering logic
+
+### 🎯 v2.3.5 (2025-11-29) - Complete Modular Refactoring
+**Main Improvements**:
+- ✨ **Architecture Refactoring**: 1686-line single file → modular structure
+  - Average file size 340 lines, easier to maintain
+  - Single responsibility principle, clear module boundaries
+  
+- 📦 **Dialogs Package Refinement**: Split into multiple professional modules
+  - `search_result_dialog.py` - Search result display (60 lines)
+  - `conflict_dialog.py` - Conflict handling (200 lines)
+  - `pdf_generator.py` - PDF report generation (210 lines)
+  
+- 📚 **Documentation Enhancement**:
+  - REFACTORING.md - Detailed refactoring explanation
+  - DIALOGS_REFACTORING.md - Dialog split report
+  - components/README.md - Module structure explanation
+  - QUICK_REFERENCE.md - Quick reference guide
+  
+- 🏗️ **Project Organization**:
+  - Created archive folder for old versions
+  - Added .gitignore file (supports Python, IDE, build artifacts)
+  - Cleaned up build/ and dist/ directories
 
 ### v2.3.4 (2025-07-17)
-- 优化搜索结果及按钮显示
-- 更新应用程序图标为 app.ico
-- 修复图标显示问题
+- Optimized search results and button display
+- Updated application icon to app.ico
+- Fixed icon display issues
 
 ### v2.3.3
-- 支持多语言、PDF、Word 和 Excel 文件搜索（已弃用）
+- Multi-language support, PDF, Word and Excel file search (deprecated)
 
 ---
 
-## 🎯 使用场景
+## 🎯 Use Cases
 
-- **文档管理**：快速定位公司内部的文档和报告
-- **代码搜索**：在大型项目中搜索特定代码片段
-- **日志分析**：查找和分析日志文件中的信息
-- **内容筛选**：从大量文件中提取满足条件的内容
-- **文件整理**：批量复制和组织文件
-
----
-
-## 📄 许可证
-
-本项目遵循 **Apache 2.0** 许可证。  
-有关详细信息，请参阅 [LICENSE](LICENSE) 文件。
+- **Document Management**: Quickly locate company documents and reports
+- **Code Search**: Search for specific code snippets in large projects
+- **Log Analysis**: Find and analyze information in log files
+- **Content Filtering**: Extract files meeting conditions from large volumes
+- **File Organization**: Batch copy and organize files
 
 ---
 
-## 📦 获取可执行文件
+## 📄 License
 
-### 多平台支持
-FileGather Pro 现已支持以下平台的自动构建：
+This project is licensed under the **Apache 2.0** License.  
+See the [LICENSE](LICENSE) file for details.
+
+---
+
+## 📦 Getting Executable Files
+
+### Multi-Platform Support
+FileGather Pro now supports automated builds for the following platforms:
 - ✅ **Windows 11** (Intel x64)
-- ✅ **macOS** (Intel x86_64 和 Apple Silicon ARM64)
-- ✅ **Linux** (Ubuntu/Debian .deb 包)
+- ✅ **macOS** (Intel x86_64 and Apple Silicon ARM64)
+- ✅ **Linux** (Ubuntu/Debian .deb package)
 
-### GitHub Release 下载
-前往 [Releases](https://github.com/ansel333/FileGather_Pro/releases) 页面下载最新版本的可执行文件
+### Download from GitHub Release
+Visit [Releases](https://github.com/ansel333/FileGather_Pro/releases) page to download the latest version of executable files
 
-**v2.4.0+ 特点**：
-- ✅ 跨平台支持（Windows、macOS、Linux）
-- ✅ 包含自定义应用图标
-- ✅ 优化的代码结构（-85% 代码）
-- ✅ 完整的功能特性
-- ✅ 无需 Python 环境即可运行
+**v2.4.0+ Features**:
+- ✅ Cross-platform support (Windows, macOS, Linux)
+- ✅ Includes custom application icon
+- ✅ Optimized code structure (-85% code)
+- ✅ Complete feature set
+- ✅ No Python environment required
 
 #### Windows
-直接运行 `FileGather_Pro.exe`
+Simply run `FileGather_Pro.exe`
 
 #### macOS
 ```bash
@@ -403,35 +402,35 @@ filegather-pro
 
 ---
 
-## 👤 作者和贡献
+## 👤 Author and Contributors
 
-**项目名称**: FileGather Pro  
-**开发者**: [daiyixr](https://github.com/daiyixr)  
-**贡献者**: [ansel333](https://github.com/ansel333) - 代码重构、UI优化、CI/CD工作流、图标集成  
-**创建日期**: 2024年  
-**最后更新**: 2025-11-29  
-
----
-
-## 📞 反馈和支持
-
-如有问题或建议，欢迎：
-- 提交 Issue
-- 发起 Pull Request
-- 联系开发者
+**Project Name**: FileGather Pro  
+**Developer**: [daiyixr](https://github.com/daiyixr)  
+**Contributors**: [ansel333](https://github.com/ansel333) - Code refactoring, UI optimization, CI/CD workflows, icon integration  
+**Created**: 2024  
+**Last Updated**: 2025-11-30  
 
 ---
 
-## 🙏 致谢
+## 📞 Feedback and Support
 
-感谢以下开源项目的支持：
-- [PyQt6](https://www.riverbankcomputing.com/software/pyqt/) - GUI 框架 (6.7.1)
-- [PyInstaller](https://www.pyinstaller.org/) - 可执行文件构建
-- [ReportLab](https://www.reportlab.com/) - PDF 生成
-- [PyMuPDF](https://pymupdf.readthedocs.io/) - PDF 处理
-- [python-docx](https://python-docx.readthedocs.io/) - Word 处理
-- [openpyxl](https://openpyxl.readthedocs.io/) - Excel 处理
-- [Pillow](https://python-pillow.org/) - 图像处理
+If you have questions or suggestions, please:
+- Submit an Issue
+- Create a Pull Request
+- Contact the developers
+
+---
+
+## 🙏 Acknowledgments
+
+Thanks to the following open-source projects:
+- [PyQt6](https://www.riverbankcomputing.com/software/pyqt/) - GUI framework (6.7.1)
+- [PyInstaller](https://www.pyinstaller.org/) - Executable file building
+- [ReportLab](https://www.reportlab.com/) - PDF generation
+- [PyMuPDF](https://pymupdf.readthedocs.io/) - PDF processing
+- [python-docx](https://python-docx.readthedocs.io/) - Word processing
+- [openpyxl](https://openpyxl.readthedocs.io/) - Excel processing
+- [Pillow](https://python-pillow.org/) - Image processing
 
 ---
 
