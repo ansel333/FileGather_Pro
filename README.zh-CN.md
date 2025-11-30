@@ -1,44 +1,44 @@
 # FileGather Pro
 
-> 💼 Professional File Collection and Search Management Tool
+> 💼 专业文件归集和搜索管理工具
 
-A powerful file management tool for quickly searching, categorizing, and managing large volumes of documents. Supports multi-format file search, advanced keyword matching, conflict handling, and PDF report generation.
+一个功能强大的文件管理工具，用于快速搜索、分类和管理大量文档。支持多格式文件搜索、高级关键词匹配、冲突处理和 PDF 报告生成。
 
-**Current Version**: v2.5.0 (2025-11-30)
+**当前版本**: v2.5.0 (2025-11-30)
 
-📖 **Available in other languages**: [中文 (Chinese)](README.zh-CN.md)
+🌐 **Other Languages**: [English](README.md)
 
 ---
 
-## ✨ Key Features
+## ✨ 主要功能
 
-### 🔍 Advanced Search
-- **Two search modes**:
-  - **Fuzzy Search** (default): Search for files containing keywords in filename
-  - **Exact Search**: Search for files with exact filename match
-- **Advanced keyword syntax**: `+keyword`, `-keyword`, `|`, `*`, `"exact phrase"`
-- **Multi-format support**: TXT, PDF, DOCX, XLSX
+### 🔍 高级搜索
+- **两种查找模式**：
+  - **模糊查找**（默认）：搜索文件名中包含关键词的文件
+  - **精确查找**：搜索文件名严格对应关键词的文件
+- **高级关键词语法**：`+keyword`、`-keyword`、`|`、`*`、`"exact phrase"`
+- **多格式支持**：TXT、PDF、DOCX、XLSX
 
-### 📁 File Management
-- Add/remove search folders
-- Support local disk and network paths
-- Batch copy and delete files
-- Smart conflict handling (overwrite, skip, rename)
+### 📁 文件管理
+- 添加/删除搜索文件夹
+- 支持本地磁盘和网络路径
+- 批量复制和删除文件
+- 智能冲突处理（覆盖、跳过、重命名）
 
-### 📊 Report Generation
-- Generate PDF operation logs
-- Include search criteria, operation records, file lists
-- Support exporting selected records (first 20, first 50, all)
-- Chinese font support
+### 📊 报告生成
+- 生成 PDF 操作日志
+- 包含搜索条件、操作记录、文件列表
+- 支持选择导出条数（前20条、前50条、全部）
+- 中文字体支持
 
-### 🎨 User Interface
-- Modern PyQt6 interface (6.7.1)
-- White background + colored border button design
-- Single-line compact button layout
-- Real-time search result preview
-- Right-click context menu
-- Progress indication and status feedback
-- Conditional visibility cancel button
+### 🎨 用户界面
+- 现代化 PyQt6 界面（6.7.1）
+- 白色背景+彩色边框按钮设计
+- 单行紧凑按钮布局
+- 即时搜索结果预览
+- 右键上下文菜单
+- 进度提示和状态反馈
+- 条件可见的取消按钮
 
 ---
 
@@ -64,51 +64,50 @@ FileGather_Pro.exe  # Windows 可执行文件（包含自定义图标）
 5. **开始搜索**：点击对应的搜索按钮
 6. **查看结果**：搜索结果显示在下方表格中
 7. **处理文件**：右键或使用按钮进行复制、删除等操作
-6. **处理搜索结果**：右键查看文件选项（打开、打开文件夹、复制、删除）
-7. **生成报告**：点击"生成 PDF 日志"导出操作记录
+8. **生成报告**：点击"生成 PDF 日志"导出操作记录
 
 ---
 
-## 🧪 Testing
+## 🧪 测试
 
-### Installation
+### 安装
 ```bash
-# Install test dependencies
+# 安装测试依赖
 pip install -r requirements-test.txt
 ```
 
-### Running Tests
+### 运行测试
 ```bash
-# Run all tests (47+ tests passing)
+# 运行所有测试（47+ 个测试通过）
 $env:QT_QPA_PLATFORM='offscreen'
 python -m pytest tests/ -v
 
-# Run specific test categories
-python -m pytest tests/test_file_operations.py -v    # File/folder operations (11 tests)
-python -m pytest tests/test_pyqt6_dialogs.py -v      # PyQt6 enum handling (12 tests)
-python -m pytest tests/test_gather_mode_routing.py -v # Gather mode routing (14 tests)
-python -m pytest tests/test_search_logic.py -v       # Search logic (20 tests)
+# 运行特定测试类别
+python -m pytest tests/test_file_operations.py -v    # 文件/文件夹操作（11 个测试）
+python -m pytest tests/test_pyqt6_dialogs.py -v      # PyQt6 枚举处理（12 个测试）
+python -m pytest tests/test_gather_mode_routing.py -v # gather_mode 路由（14 个测试）
+python -m pytest tests/test_search_logic.py -v       # 搜索逻辑（20 个测试）
 
-# Run with coverage report
+# 运行并生成覆盖率报告
 python -m pytest tests/ --cov=components --cov-report=html
 
-# Run only unit tests
+# 仅运行单元测试
 python -m pytest tests/ -m unit -v
 
-# Using the test runner script
-python run_tests.py all           # Run all tests
-python run_tests.py unit          # Run unit tests only
-python run_tests.py coverage      # Generate coverage report
-python run_tests.py list          # List all available tests
+# 使用测试运行脚本
+python run_tests.py all           # 运行所有测试
+python run_tests.py unit          # 仅运行单元测试
+python run_tests.py coverage      # 生成覆盖率报告
+python run_tests.py list          # 列出所有可用测试
 ```
 
-### Test Coverage
-- **11 tests** in `test_file_operations.py` - File/folder copy, delete, batch operations, hash calculation
-- **12 tests** in `test_pyqt6_dialogs.py` - PyQt6 enum handling, dialog return values, button combinations
-- **14 tests** in `test_gather_mode_routing.py` - File vs folder mode routing, conditional logic, operations
-- **20 tests** in `test_search_logic.py` - Exact match, keyword matching, content search
-- **47+ total tests** passing with comprehensive coverage
-- Environment: Python 3.11.9, pytest 7.4.3, PyQt6 6.7.1
+### 测试覆盖
+- **11 个测试** in `test_file_operations.py` - 文件/文件夹复制、删除、批量操作、哈希计算
+- **12 个测试** in `test_pyqt6_dialogs.py` - PyQt6 枚举处理、对话框返回值、按钮组合
+- **14 个测试** in `test_gather_mode_routing.py` - 文件/文件夹模式路由、条件逻辑、操作
+- **20 个测试** in `test_search_logic.py` - 精确匹配、关键词匹配、内容搜索
+- **47+ 总测试** 全部通过，覆盖范围全面
+- 环境：Python 3.11.9、pytest 7.4.3、PyQt6 6.7.1
 
 ---
 
@@ -118,7 +117,7 @@ python run_tests.py list          # List all available tests
 
 ```
 FileGather_Pro/
-├── FileGather_Pro.py                # 应用入口（v2.4.0）
+├── FileGather_Pro.py                # 应用入口（v2.5.0）
 ├── FileGather_Pro.spec              # PyInstaller 配置
 ├── app.ico                          # 应用程序图标（256×256）
 ├── components/                      # 核心模块包
@@ -148,7 +147,7 @@ FileGather_Pro/
 ├── archive/                         # 旧版本归档
 ├── ai-workflow/                     # 工作流文档
 ├── .github/workflows/               # GitHub Actions CI/CD
-│   └── build-windows-11-intel.yml   # Windows 自动构建
+│   └── build-all-platforms.yml      # 多平台自动构建
 ├── .gitignore                       # Git忽略配置
 ├── LICENSE                          # Apache 2.0 许可证
 └── README.md                        # 项目说明
@@ -239,8 +238,8 @@ pip install PyQt6==6.7.1 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 ope
   - 所有文档已更新至最新版本
   
 - 🧹 **项目清理**
-  - 移除 `build-macos-intel.yml`（过时工作流）
-  - 移除 `release_notes.md`（改用 GitHub Releases）
+  - 删除重复的工作流文件（仅保留 build-all-platforms.yml）
+  - 移除过时的工作流配置
   - 所有过时文件已清理
 
 **技术细节**:
@@ -248,7 +247,7 @@ pip install PyQt6==6.7.1 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 ope
 - main_window.py：动态读取版本号
 - 工作流：改为从 VERSION 文件提取版本
 - 47+ 单元测试全部通过
-- 4 个活跃的 GitHub Actions 工作流
+- 1 个统一的 GitHub Actions 工作流
 
 ### 🎉 v2.4.0 (2025-11-29) - 主窗口精简与图标集成 & PyQt6 升级
 **重大改进**：
@@ -294,7 +293,7 @@ pip install PyQt6==6.7.1 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 ope
 - PyQt6 6.7.1 框架升级（从 5.15.11）
 - 47+ 单元测试，comprehensive coverage
 - PyInstaller v6.17.0 配置
-- GitHub Actions Windows 11 自动构建
+- GitHub Actions 多平台自动构建
 
 ### ✨ v2.3.5.1 (2025-11-29) - 精确查找功能
 **新增功能**：
@@ -409,7 +408,7 @@ filegather-pro
 **开发者**: [daiyixr](https://github.com/daiyixr)  
 **贡献者**: [ansel333](https://github.com/ansel333) - 代码重构、UI优化、CI/CD工作流、图标集成  
 **创建日期**: 2024年  
-**最后更新**: 2025-11-29  
+**最后更新**: 2025-11-30  
 
 ---
 
@@ -436,4 +435,3 @@ filegather-pro
 ---
 
 **Made with ❤️ for efficient file management**
-
