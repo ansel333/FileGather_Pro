@@ -70,10 +70,8 @@ jobs:
       - name: Extract version
         id: version
         run: |
-          VERSION=$(grep -oP '文件归集管理器\s+\K\d+\.\d+\.\d+' FileGather_Pro.py || echo "2.5.0")
+          VERSION=$(cat VERSION | tr -d '\n' | tr -d ' ')
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
@@ -106,7 +104,7 @@ jobs:
       - name: Extract version
         id: version
         run: |
-          VERSION=$(grep -oP '文件归集管理器\s+\K\d+\.\d+\.\d+' FileGather_Pro.py || echo "2.5.0")
+          VERSION=$(cat VERSION | tr -d '\n' | tr -d ' ')
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Install system dependencies
