@@ -172,6 +172,27 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Extract version from tag
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Delete existing draft releases for this version
+        run: |
+          # Get all releases for this version
+          RELEASES=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases")
+          
+          # Filter draft releases matching this version and delete them
+          echo "$RELEASES" | jq -r ".[] | select(.draft==true and .tag_name==\"v${{ steps.version.outputs.VERSION }}\") | .id" | while read RELEASE_ID; do
+            if [ ! -z "$RELEASE_ID" ]; then
+              echo "Deleting draft release ID: $RELEASE_ID"
+              curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID"
+            fi
+          done
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
