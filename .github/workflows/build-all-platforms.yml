@@ -72,6 +72,8 @@ jobs:
         run: |
           VERSION=$(cat VERSION | tr -d '\n' | tr -d ' ')
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
