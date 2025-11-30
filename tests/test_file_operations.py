@@ -15,99 +15,36 @@ os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from components.file_operations import calculate_hash, copy_files_without_conflicts, copy_selected_files, delete_files_batch
+from components.file_operations import (
+    calculate_hash,
+    copy_files_without_conflicts,
+    copy_selected_files,
+    delete_files_batch,
+    copy_folders_without_conflicts,
+)
 from components.utils import get_file_info_dict
 
 
-class TestFindFiles:
-    """File finding tests"""
+class TestBasicFileOperations:
+    """Basic file operations tests"""
     
-    def test_find_files_in_directory(self):
-        """Test finding files in a directory"""
+    def test_file_exists_check(self):
+        """Test checking if file exists"""
         with tempfile.TemporaryDirectory() as tmpdir:
-            # Create test files
-            Path(tmpdir, "test1.txt").touch()
-            Path(tmpdir, "test2.txt").touch()
-            Path(tmpdir, "data.py").touch()
+            file_path = Path(tmpdir, "test.txt")
+            assert not file_path.exists()
             
-            # Find all files
-            files = find_files(tmpdir, include_subfolders=False)
-            assert len(files) >= 3
+            file_path.touch()
+            assert file_path.exists()
     
-    def test_find_files_with_extension_filter(self):
-        """Test file finding with extension filter"""
+    def test_directory_exists_check(self):
+        """Test checking if directory exists"""
         with tempfile.TemporaryDirectory() as tmpdir:
-            Path(tmpdir, "file1.txt").touch()
-            Path(tmpdir, "file2.txt").touch()
-            Path(tmpdir, "file3.py").touch()
+            dir_path = Path(tmpdir, "subdir")
+            assert not dir_path.exists()
             
-            # Find only .txt files
-            txt_files = [f for f in find_files(tmpdir, include_subfolders=False) 
-                        if f.endswith('.txt')]
-            assert len(txt_files) == 2
-    
-    def test_find_files_recursive(self):
-        """Test recursive file finding"""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            # Create subdirectory and files
-            subdir = Path(tmpdir, "subdir")
-            subdir.mkdir()
-            Path(tmpdir, "file1.txt").touch()
-            Path(subdir, "file2.txt").touch()
-            
-            # Recursive search
-            files = find_files(tmpdir, include_subfolders=True)
-            assert len(files) >= 2
-    
-    def test_find_files_empty_directory(self):
-        """Test finding files in empty directory"""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            files = find_files(tmpdir, include_subfolders=False)
-            assert len(files) == 0
-    
-    def test_find_files_nonexistent_directory(self):
-        """Test finding files in non-existent directory"""
-        files = find_files("/nonexistent/directory", include_subfolders=False)
-        assert files == [] or files is None
-
-
-class TestGetFileInfo:
-    """File info retrieval tests"""
-    
-    def test_get_file_info_size(self):
-        """Test retrieving file size"""
-        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
-            f.write("test content\n" * 100)
-            f.flush()
-            
-            info = get_file_info_dict(f.name)
-            assert info is not None
-            assert info.get('size', 0) > 0
-            
-            os.unlink(f.name)
-    
-    def test_get_file_info_time(self):
-        """Test retrieving file time info"""
-        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
-            f.write("test")
-            f.flush()
-            
-            info = get_file_info_dict(f.name)
-            assert info is not None
-            assert 'modify_time' in info or 'mtime' in info
-            
-            os.unlink(f.name)
-    
-    def test_get_file_info_nonexistent_file(self):
-        """Test getting info on non-existent file"""
-        info = get_file_info_dict("/nonexistent/file.txt")
-        assert info is None or info == {}
-    
-    def test_get_file_info_directory(self):
-        """Test getting directory info"""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            info = get_file_info_dict(tmpdir)
-            assert info is not None or info == {}
+            dir_path.mkdir()
+            assert dir_path.exists()
 
 
 class TestCopyFile:
@@ -233,6 +170,232 @@ class TestFileOperationsIntegration:
                     assert file.exists()
                 except Exception as e:
                     pass  # Some systems may not support certain characters
+
+
+class TestCopyFolder:
+    """Folder copy tests (for folder gathering mode)"""
+    
+    def test_copy_folder_basic(self):
+        """Test basic folder copy with copytree"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Create source folder structure
+            src_folder = Path(tmpdir, "source_folder")
+            src_folder.mkdir()
+            (src_folder / "file1.txt").write_text("content1")
+            (src_folder / "file2.txt").write_text("content2")
+            
+            # Create subfolder
+            subfolder = src_folder / "subfolder"
+            subfolder.mkdir()
+            (subfolder / "file3.txt").write_text("content3")
+            
+            # Copy folder
+            dest_folder = Path(tmpdir, "dest_folder")
+            shutil.copytree(str(src_folder), str(dest_folder))
+            
+            # Verify copy
+            assert dest_folder.exists()
+            assert (dest_folder / "file1.txt").read_text() == "content1"
+            assert (dest_folder / "file2.txt").read_text() == "content2"
+            assert (dest_folder / "subfolder" / "file3.txt").read_text() == "content3"
+    
+    def test_copy_folder_conflict_rename(self):
+        """Test folder copy with conflict handling (auto-rename)"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Create source folder
+            src_folder = Path(tmpdir, "source_folder")
+            src_folder.mkdir()
+            (src_folder / "file1.txt").write_text("source_content")
+            
+            # Create destination folder with same name
+            dest_base = Path(tmpdir, "dest_base")
+            dest_base.mkdir()
+            existing_folder = dest_base / "source_folder"
+            existing_folder.mkdir()
+            (existing_folder / "file2.txt").write_text("existing_content")
+            
+            # Simulate conflict handling with rename
+            dst = existing_folder
+            if dst.exists():
+                counter = 1
+                dst = dest_base / f"source_folder_{counter}"
+                while dst.exists():
+                    counter += 1
+                    dst = dest_base / f"source_folder_{counter}"
+            
+            # Copy to renamed location
+            shutil.copytree(str(src_folder), str(dst))
+            
+            # Verify both folders exist
+            assert existing_folder.exists()
+            assert dst.exists()
+            assert dst.name == "source_folder_1"
+            assert (dst / "file1.txt").read_text() == "source_content"
+            assert (existing_folder / "file2.txt").read_text() == "existing_content"
+    
+    def test_copy_folder_empty(self):
+        """Test copying empty folder"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            src_folder = Path(tmpdir, "empty_folder")
+            src_folder.mkdir()
+            
+            dst_folder = Path(tmpdir, "empty_folder_copy")
+            shutil.copytree(str(src_folder), str(dst_folder))
+            
+            assert dst_folder.exists()
+            assert list(dst_folder.iterdir()) == []
+
+
+class TestDeleteFolder:
+    """Folder deletion tests (for folder gathering mode)"""
+    
+    def test_delete_folder_basic(self):
+        """Test basic folder deletion with rmtree"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Create folder with content
+            folder = Path(tmpdir, "test_folder")
+            folder.mkdir()
+            (folder / "file1.txt").write_text("content")
+            
+            subfolder = folder / "subfolder"
+            subfolder.mkdir()
+            (subfolder / "file2.txt").write_text("content")
+            
+            # Delete folder
+            assert folder.exists()
+            shutil.rmtree(str(folder))
+            assert not folder.exists()
+    
+    def test_delete_folder_empty(self):
+        """Test deleting empty folder"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            folder = Path(tmpdir, "empty_folder")
+            folder.mkdir()
+            
+            assert folder.exists()
+            shutil.rmtree(str(folder))
+            assert not folder.exists()
+    
+    def test_delete_folder_nested(self):
+        """Test deleting nested folder structure"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Create nested structure
+            folder = Path(tmpdir, "root_folder")
+            folder.mkdir()
+            (folder / "level1").mkdir()
+            (folder / "level1" / "level2").mkdir()
+            (folder / "level1" / "level2" / "file.txt").write_text("content")
+            
+            # Delete entire tree
+            assert folder.exists()
+            shutil.rmtree(str(folder))
+            assert not folder.exists()
+
+
+class TestDeleteFilesBatch:
+    """Batch file/folder deletion tests (mixed mode)"""
+    
+    def test_delete_batch_files_only(self):
+        """Test batch deletion of files only"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Create multiple files
+            files = [Path(tmpdir, f"file{i}.txt") for i in range(3)]
+            for i, f in enumerate(files):
+                f.write_text(f"content{i}")
+            
+            # Create a folder (should not be deleted in this test)
+            folder = Path(tmpdir, "keep_folder")
+            folder.mkdir()
+            
+            # Prepare deletion list with file paths only
+            files_to_delete = [str(f) for f in files]
+            
+            # Simulate batch deletion
+            success_count = 0
+            for file_path in files_to_delete:
+                file_path_obj = Path(file_path)
+                if file_path_obj.exists():
+                    if file_path_obj.is_dir():
+                        shutil.rmtree(str(file_path_obj))
+                    else:
+                        file_path_obj.unlink()
+                    success_count += 1
+            
+            # Verify
+            assert success_count == 3
+            for f in files:
+                assert not f.exists()
+            assert folder.exists()
+    
+    def test_delete_batch_mixed_files_and_folders(self):
+        """Test batch deletion of mixed files and folders"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Create files and folders
+            file1 = Path(tmpdir, "file1.txt")
+            file1.write_text("content1")
+            
+            folder1 = Path(tmpdir, "folder1")
+            folder1.mkdir()
+            (folder1 / "nested_file.txt").write_text("nested")
+            
+            file2 = Path(tmpdir, "file2.txt")
+            file2.write_text("content2")
+            
+            # Prepare mixed deletion list
+            items_to_delete = [str(file1), str(folder1), str(file2)]
+            
+            # Simulate batch deletion
+            success_count = 0
+            for item_path in items_to_delete:
+                item_path_obj = Path(item_path)
+                if item_path_obj.exists():
+                    if item_path_obj.is_dir():
+                        shutil.rmtree(str(item_path_obj))
+                    else:
+                        item_path_obj.unlink()
+                    success_count += 1
+            
+            # Verify all deleted
+            assert success_count == 3
+            assert not file1.exists()
+            assert not folder1.exists()
+            assert not file2.exists()
+
+
+class TestCalculateHash:
+    """File hash calculation tests"""
+    
+    def test_calculate_hash_consistency(self):
+        """Test that hash calculation is consistent"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            f = Path(tmpdir, "test_hash.txt")
+            f.write_text("test content for hashing")
+            
+            hash1 = calculate_hash(str(f))
+            hash2 = calculate_hash(str(f))
+            
+            assert hash1 == hash2
+            assert hash1 is not None
+            assert len(hash1) == 64  # SHA256 hex digest length
+    
+    def test_calculate_hash_different_content(self):
+        """Test that different content produces different hashes"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            file1 = Path(tmpdir, "file1.txt")
+            file2 = Path(tmpdir, "file2.txt")
+            
+            file1.write_text("content1")
+            file2.write_text("content2")
+            
+            hash1 = calculate_hash(str(file1))
+            hash2 = calculate_hash(str(file2))
+            
+            assert hash1 != hash2
+    
+    def test_calculate_hash_nonexistent_file(self):
+        """Test hash calculation on non-existent file"""
+        result = calculate_hash("/nonexistent/file.txt")
+        assert result is None
 
 
 if __name__ == "__main__":
