@@ -41,7 +41,7 @@ def _display_search_results(self, all_found_files, keyword_results):
             file_info['mod_date'],
             keywords_str
         ])
-        item.setData(0, Qt.UserRole, file_info['path'])
+        item.setData(0, Qt.ItemDataRole.UserRole, file_info['path'])
         item.setToolTip(0, file_info['name'])
         item.setToolTip(1, str(Path(file_info['path']).parent))
         item.setToolTip(4, f"匹配关键词: {keywords_str}")
@@ -219,7 +219,7 @@ def show_file_info(self, item, column):
     import os
     from PyQt6.QtWidgets import QMessageBox
     
-    file_path = item.data(0, Qt.UserRole)
+    file_path = item.data(0, Qt.ItemDataRole.UserRole)
     if not file_path:
         return
 

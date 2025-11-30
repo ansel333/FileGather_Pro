@@ -6,14 +6,14 @@ Includes copy, delete, and PDF log generation
 import os
 from pathlib import Path
 
-from PyQt6.QtWidgets import QFileDialog, QMessageBox, QApplication
+from PyQt6.QtWidgets import QFileDialog, QMessageBox, QApplication, QDialog
 
-from ..file_operations import copy_files_without_conflicts, copy_selected_files, delete_files_batch
+from ..file_operations import copy_files_without_conflicts, copy_selected_files, delete_files_batch, copy_folders_without_conflicts
 from ..dialogs import FileConflictDialog, PDFLogGenerator
 
 
 def copy_files(self):
-    """复制文件"""
+    """复制文件或文件夹"""
     if not self.target_folder:
         QMessageBox.warning(self, "错误", "请先选择目标文件夹！")
         return
@@ -30,22 +30,34 @@ def copy_files(self):
 
     target_path.mkdir(parents=True, exist_ok=True)
 
-    # 检查冲突文件
-    existing_files = set()
-    for file_info in self.search_results:
-        target_file = target_path / file_info['name']
-        if target_file.exists():
-            existing_files.add(file_info['name'])
+    # 检查是否为文件夹模式
+    gather_mode = self.gather_mode_combo.currentData()
+    is_folder_mode = gather_mode == "folder"
 
-    if not existing_files:
-        copy_files_without_conflicts(self, self.search_results)
+    # 检查冲突文件/文件夹
+    existing_items = set()
+    for item_info in self.search_results:
+        target_item = target_path / item_info['name']
+        if target_item.exists():
+            existing_items.add(item_info['name'])
+
+    if not existing_items:
+        if is_folder_mode:
+            copy_folders_without_conflicts(self, self.search_results)
+        else:
+            copy_files_without_conflicts(self, self.search_results)
         return
 
-    # 处理冲突
-    conflict_dialog = FileConflictDialog(self, self.search_results, self.target_folder)
-    if conflict_dialog.exec() == FileConflictDialog.Accepted:
-        files_to_copy = conflict_dialog.get_selected_files()
-        copy_selected_files(self, files_to_copy)
+    # 处理冲突（文件夹模式不支持冲突处理，直接跳过或重命名）
+    if is_folder_mode:
+        # 文件夹模式下，直接使用添加后缀的方式处理
+        copy_folders_without_conflicts(self, self.search_results)
+    else:
+        # 文件模式下，显示冲突对话框
+        conflict_dialog = FileConflictDialog(self, self.search_results, self.target_folder)
+        if conflict_dialog.exec() == QDialog.DialogCode.Accepted:
+            files_to_copy = conflict_dialog.get_selected_files()
+            copy_selected_files(self, files_to_copy)
 
 
 def delete_files(self):
@@ -96,7 +108,7 @@ def delete_files(self):
                 # 从树中移除
                 for index in range(self.results_tree.topLevelItemCount()):
                     item = self.results_tree.topLevelItem(index)
-                    if item.data(0, Qt.UserRole) == file_info['path']:
+                    if item.data(0, Qt.ItemDataRole.UserRole) == file_info['path']:
                         self.results_tree.takeTopLevelItem(index)
                         break
         

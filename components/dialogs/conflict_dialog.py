@@ -54,7 +54,7 @@ class FileConflictDialog(QDialog):
             conflict = "存在冲突" if target_path.exists() else ""
 
             item = QListWidgetItem(f"{file_name} - {conflict}")
-            item.setData(Qt.UserRole, file_info)
+            item.setData(Qt.ItemDataRole.UserRole, file_info)
             self.file_list.addItem(item)
 
             if conflict:
@@ -99,7 +99,7 @@ class FileConflictDialog(QDialog):
         layout.addLayout(button_layout)
 
         # 确定/取消按钮
-        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
 
@@ -115,7 +115,7 @@ class FileConflictDialog(QDialog):
             return
 
         for item in selected_items:
-            file_info = item.data(Qt.UserRole)
+            file_info = item.data(Qt.ItemDataRole.UserRole)
 
             if action == "overwrite":
                 item.setText(f"{file_info['name']} - 将覆盖")
@@ -139,7 +139,7 @@ class FileConflictDialog(QDialog):
         """为所有冲突文件自动重命名"""
         for index in range(self.file_list.count()):
             item = self.file_list.item(index)
-            file_info = item.data(Qt.UserRole)
+            file_info = item.data(Qt.ItemDataRole.UserRole)
 
             if "存在冲突" in item.text():
                 new_name = self._generate_unique_name(file_info['name'])
@@ -152,7 +152,7 @@ class FileConflictDialog(QDialog):
         """将所有冲突文件设置为覆盖"""
         for index in range(self.file_list.count()):
             item = self.file_list.item(index)
-            file_info = item.data(Qt.UserRole)
+            file_info = item.data(Qt.ItemDataRole.UserRole)
             item.setText(f"{file_info['name']} - 将覆盖")
             item.setForeground(QColor("blue"))
             file_info['action'] = "overwrite"

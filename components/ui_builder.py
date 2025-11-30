@@ -34,21 +34,30 @@ class UIBuilder:
             color: #2980b9;
         }
         QPushButton {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-weight: bold;
+            background-color: white;
+            color: #2c3e50;
+            border: 2px solid #3498db;
+            padding: 6px 14px;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 10pt;
+            min-height: 24px;
+            min-width: 80px;
         }
         QPushButton:hover {
-            background-color: #2980b9;
+            background-color: #ecf0f1;
+            border: 2px solid #2980b9;
+            color: #2c3e50;
         }
         QPushButton:pressed {
-            background-color: #1c6ea4;
+            background-color: #d5dbdb;
+            border: 2px solid #1c6ea4;
+            color: #1c6ea4;
         }
         QPushButton:disabled {
-            background-color: #95a5a6;
+            background-color: #ecf0f1;
+            color: #95a5a6;
+            border: 2px solid #bdc3c7;
         }
         QTreeWidget {
             background-color: rgba(255, 255, 255, 200);
@@ -307,52 +316,49 @@ class UIBuilder:
 
     @staticmethod
     def build_action_buttons():
-        """构建操作按钮 - 两行布局"""
-        button_layout = QVBoxLayout()
+        """构建操作按钮 - 单行紧凑布局"""
+        button_layout = QHBoxLayout()
+        button_layout.setSpacing(6)
+        button_layout.setContentsMargins(0, 5, 0, 5)
         
-        # 第一行：搜索相关按钮
-        search_layout = QHBoxLayout()
-        search_button = QPushButton("🔍 模糊查找")
+        search_button = QPushButton("模糊查找")
         search_button.setToolTip("搜索包含关键词的文件（默认模式）")
-        exact_search_button = QPushButton("✓ 精确查找")
+        
+        exact_search_button = QPushButton("精确查找")
         exact_search_button.setToolTip("搜索文件名完全匹配关键词的文件")
-        cancel_button = QPushButton("⏹ 取消搜索")
-        cancel_button.setEnabled(False)
-        cancel_button.setToolTip("停止当前搜索")
         
-        search_layout.addWidget(search_button, 1)
-        search_layout.addWidget(exact_search_button, 1)
-        search_layout.addWidget(cancel_button, 1)
-        button_layout.addLayout(search_layout)
-        
-        # 第二行：文件操作按钮
-        file_ops_layout = QHBoxLayout()
-        target_button = QPushButton("📂 选择目标文件夹")
+        target_button = QPushButton("选择目标")
         target_button.setToolTip("设置文件复制的目标文件夹")
-        copy_button = QPushButton("📋 开始归集")
+        
+        copy_button = QPushButton("开始归集")
         copy_button.setEnabled(False)
         copy_button.setToolTip("将找到的文件复制到目标文件夹")
-        delete_button = QPushButton("🗑 删除原始文件")
+        
+        delete_button = QPushButton("删除原文件")
         delete_button.setEnabled(False)
         delete_button.setToolTip("删除已复制的原始文件")
         
-        file_ops_layout.addWidget(target_button, 1)
-        file_ops_layout.addWidget(copy_button, 1)
-        file_ops_layout.addWidget(delete_button, 1)
-        button_layout.addLayout(file_ops_layout)
-        
-        # 第三行：报告和帮助
-        utility_layout = QHBoxLayout()
-        log_button = QPushButton("📄 生成日志")
+        log_button = QPushButton("生成日志")
         log_button.setEnabled(True)
         log_button.setToolTip("生成搜索和操作日志的PDF报告")
-        help_button = QPushButton("❓ 使用说明")
+        
+        help_button = QPushButton("使用说明")
         help_button.setToolTip("查看应用使用说明")
         
-        utility_layout.addStretch(1)
-        utility_layout.addWidget(log_button, 1)
-        utility_layout.addWidget(help_button, 1)
-        button_layout.addLayout(utility_layout)
+        cancel_button = QPushButton("取消搜索")
+        cancel_button.setEnabled(False)
+        cancel_button.setVisible(False)  # 初始隐藏，搜索时显示
+        cancel_button.setToolTip("停止当前搜索")
+        
+        button_layout.addWidget(search_button, 0)
+        button_layout.addWidget(exact_search_button, 0)
+        button_layout.addWidget(target_button, 0)
+        button_layout.addWidget(copy_button, 0)
+        button_layout.addWidget(delete_button, 0)
+        button_layout.addWidget(log_button, 0)
+        button_layout.addWidget(help_button, 0)
+        button_layout.addWidget(cancel_button, 0)
+        button_layout.addStretch()
 
         return (button_layout, search_button, exact_search_button, cancel_button, target_button, 
                 copy_button, delete_button, log_button, help_button)

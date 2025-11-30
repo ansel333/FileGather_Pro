@@ -125,7 +125,12 @@ def delete_files_batch(parent, files_to_delete):
                 error_files.append(f"{file_path} (文件不存在)")
                 continue
 
-            file_path.unlink()
+            # 如果是目录，使用 rmtree 删除；否则使用 unlink 删除
+            if file_path.is_dir():
+                shutil.rmtree(str(file_path))
+            else:
+                file_path.unlink()
+            
             parent.add_log(f"删除文件: {file_path}", file_path)
             success_count += 1
 
@@ -139,3 +144,51 @@ def delete_files_batch(parent, files_to_delete):
 
     parent.progress_bar.setVisible(False)
     return success_count, error_files
+
+
+def copy_folders_without_conflicts(parent, folders_to_copy):
+    """复制文件夹（不存在冲突）"""
+    if not folders_to_copy:
+        return
+
+    parent.progress_bar.setVisible(True)
+    parent.progress_bar.setValue(0)
+    parent.status_label.setText("正在复制文件夹...")
+    QApplication.processEvents()
+
+    error_folders = []
+
+    for i, folder_info in enumerate(folders_to_copy):
+        src = Path(folder_info['path'])
+        dst = Path(parent.target_folder) / folder_info['name']
+
+        try:
+            # 如果目标文件夹已存在，添加后缀
+            if dst.exists():
+                counter = 1
+                dst = Path(parent.target_folder) / f"{folder_info['name']}_{counter}"
+                while dst.exists():
+                    counter += 1
+                    dst = Path(parent.target_folder) / f"{folder_info['name']}_{counter}"
+            
+            shutil.copytree(str(src), str(dst))
+            parent.add_log(f"复制文件夹到目标文件夹: {dst}", src)
+        except Exception as e:
+            error_folders.append(f"{src} ({str(e)})")
+
+        progress = int((i + 1) / len(folders_to_copy) * 100)
+        parent.progress_bar.setValue(progress)
+        if i % 10 == 0:
+            QApplication.processEvents()
+
+    parent.progress_bar.setVisible(False)
+
+    if error_folders:
+        error_msg = "以下文件夹复制失败：\n\n" + "\n".join(error_folders[:10])
+        if len(error_folders) > 10:
+            error_msg += f"\n\n...以及另外 {len(error_folders)-10} 个文件夹"
+        QMessageBox.warning(parent, "复制错误", error_msg)
+        parent.status_label.setText(f"已成功复制 {len(folders_to_copy)-len(error_folders)} 个文件夹，{len(error_folders)} 个失败")
+    else:
+        parent.status_label.setText(f"已成功复制 {len(folders_to_copy)} 个文件夹到目标文件夹")
+        parent.delete_button.setEnabled(True)

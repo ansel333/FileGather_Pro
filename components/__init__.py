@@ -24,6 +24,7 @@ from .file_operations import (
     calculate_hash,
     copy_files_without_conflicts,
     copy_selected_files,
+    copy_folders_without_conflicts,
     delete_files_batch
 )
 from .dialogs import (

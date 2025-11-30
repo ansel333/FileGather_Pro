@@ -41,7 +41,7 @@ def open_file_folder(self):
     if not selected_items:
         return
 
-    file_path = selected_items[0].data(0, Qt.UserRole)
+    file_path = selected_items[0].data(0, Qt.ItemDataRole.UserRole)
     folder_path = Path(file_path).parent
 
     try:
