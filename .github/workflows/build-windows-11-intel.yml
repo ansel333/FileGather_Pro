@@ -42,11 +42,11 @@ jobs:
 
       - name: Build executable
         run: |
-          $ICON_FLAG = ""
+          $args = @("--onefile", "--windowed", "--name", "FileGather_Pro", "--add-data", "components;components", "--distpath", "dist", "--workpath", "build", "--clean", "FileGather_Pro.py")
           if (Test-Path "app.ico") {
-            $ICON_FLAG = "--icon app.ico"
+            $args = @("--onefile", "--windowed", "--name", "FileGather_Pro", "--add-data", "components;components", "--icon", "app.ico", "--distpath", "dist", "--workpath", "build", "--clean", "FileGather_Pro.py")
           }
-          pyinstaller --onefile --windowed --name FileGather_Pro --add-data "components;components" $ICON_FLAG --distpath dist --workpath build --clean FileGather_Pro.py
+          pyinstaller @args
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
