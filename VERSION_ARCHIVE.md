@@ -1,9 +1,49 @@
 # FileGather Pro Version Archive
 
-## Version 2.5.0 (In Progress)
+## Version 2.5.1 (2025-12-01)
 
-**Release Date**: TBD  
-**Status**: Development  
+**Release Date**: 2025-12-01  
+**Status**: Released  
+**Branch**: main
+
+### Major Features
+
+- ✅ **UI Improvements & Bug Fixes**
+  - Added reset button to restore application to initial state
+  - Improved unfound keywords display with tree widget
+  - Added copy feedback labels for user interaction
+  - Fixed keyword statistics to display all found keywords
+  - Single-result keywords now displayed in separate tree widget
+  
+- ✅ **Enhanced Search Experience**
+  - Support for consecutive searches (fuzzy → exact or vice versa)
+  - Better button state management during search operations
+  - Improved layout spacing when unfound keywords are present
+
+- ✅ **User Experience**
+  - Reset button clears all data and resets window size to initial state
+  - Copy operations show feedback with keyword count
+  - Better visual hierarchy for search results
+
+### Bug Fixes
+
+- Fixed issue where consecutive searches (exact then fuzzy or vice versa) would fail
+- Fixed unfound keywords not displaying correctly
+- Fixed button layout alignment issues
+- Improved tree widget visibility control
+
+### Technical Improvements
+
+- Refactored keyword display logic
+- Better state management for search operations
+- Improved UI component initialization
+
+---
+
+## Version 2.5.0 (2025-11-30)
+
+**Release Date**: 2025-11-30  
+**Status**: Released  
 **Branch**: main
 
 ### Major Features
@@ -195,18 +235,20 @@
 
 ## Version Comparison Summary
 
-| Feature | v2.3.4 | v2.3.5 | v2.3.5.1 | v2.4.0 | v2.5.0 |
-|---------|--------|--------|----------|--------|--------|
-| Code Structure | Single file, 1686 lines | Modular, 6 modules | Modular, 6 modules | Modular, enhanced | Modular, folder mode |
-| Exact Search | ❌ | ❌ | ✅ | ✅ | ✅ |
-| Fuzzy Search | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Advanced Keywords | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Button Layout | Single row | Single row | Three rows | Optimized | Optimized |
-| Tool Tooltips | ❌ | ❌ | ✅ | ✅ | ✅ |
-| Quick Launch Scripts | ❌ | ❌ | ✅ | ✅ | ✅ |
-| CI/CD Automation | ❌ | ✅ | ✅ | ✅ | ✅ |
-| Folder Collection | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Code Maintainability | Low | High | High | High | High |
+| Feature | v2.3.4 | v2.3.5 | v2.3.5.1 | v2.4.0 | v2.5.0 | v2.5.1 |
+|---------|--------|--------|----------|--------|--------|--------|
+| Code Structure | Single file, 1686 lines | Modular, 6 modules | Modular, 6 modules | Modular, enhanced | Modular, folder mode | Modular, enhanced |
+| Exact Search | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Fuzzy Search | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Advanced Keywords | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Reset Button | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Tree Widget Keywords | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Button Layout | Single row | Single row | Three rows | Optimized | Optimized | Optimized |
+| Tool Tooltips | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Quick Launch Scripts | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| CI/CD Automation | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Folder Collection | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Code Maintainability | Low | High | High | High | High | High |
 
 ---
 
@@ -230,6 +272,6 @@ For each new version:
 
 ---
 
-**Last Updated**: 2025-11-29  
+**Last Updated**: 2025-12-01  
 **Maintainers**: daiyixr, ansel333  
 **Repository**: https://github.com/ansel333/FileGather_Pro

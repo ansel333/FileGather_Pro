@@ -31,7 +31,7 @@ def get_version():
         with open(version_file, 'r') as f:
             return f.read().strip()
     except:
-        return "2.5.0"
+        return "2.5.1"
 
 class FileGatherPro(QMainWindow):
     """文件归集管理器主窗口类"""
@@ -130,7 +130,7 @@ class FileGatherPro(QMainWindow):
         self.found_files_count = 0
         self.keyword_results = {}
         self.unfound_keywords = []
-        self.version = "2.5.0"
+        self.version = "2.5.1"
 
     def _build_ui(self):
         """构建用户界面"""

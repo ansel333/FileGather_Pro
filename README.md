@@ -4,7 +4,7 @@
 
 A powerful file management tool for quickly searching, categorizing, and managing large volumes of documents. Supports multi-format file search, advanced keyword matching, conflict handling, and PDF report generation.
 
-**Current Version**: v2.5.0 (2025-11-30)
+**Current Version**: v2.5.1 (2025-12-01)
 
 📖 **Available in other languages**: [中文 (Chinese)](README.zh-CN.md)
 
@@ -117,7 +117,7 @@ python run_tests.py list          # List all available tests
 
 ```
 FileGather_Pro/
-├── FileGather_Pro.py                # Application entry point (v2.5.0)
+├── FileGather_Pro.py                # Application entry point (v2.5.1)
 ├── FileGather_Pro.spec              # PyInstaller configuration
 ├── app.ico                          # Application icon (256×256)
 ├── components/                      # Core modules package
