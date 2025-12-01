@@ -48,9 +48,9 @@ class FileGatherPro(QMainWindow):
         else:
             self.setWindowIcon(QIcon())
         
-        self.setGeometry(100, 100, 1000, 1050)
-        self.setMinimumSize(1000, 850)
-        self.setMaximumWidth(1000)
+        self.setGeometry(100, 100, 800, 750)
+        self.setMinimumSize(800, 650)
+        self.setMaximumWidth(800)
 
         # 初始化应用程序状态变量
         self._init_state()

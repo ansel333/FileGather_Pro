@@ -37,12 +37,12 @@ class UIBuilder:
             background-color: white;
             color: #2c3e50;
             border: 2px solid #3498db;
-            padding: 6px 14px;
+            padding: 3px 8px;
             border-radius: 5px;
             font-weight: 600;
-            font-size: 10pt;
-            min-height: 24px;
-            min-width: 80px;
+            font-size: 8pt;
+            min-height: 18px;
+            min-width: 60px;
         }
         QPushButton:hover {
             background-color: #ecf0f1;
@@ -109,13 +109,13 @@ class UIBuilder:
     def build_title_widgets(version):
         """构建标题和版本信息小部件"""
         title_label = QLabel("文件归集管理器")
-        title_label.setFont(QFont("Arial", 18, QFont.Weight.Bold))
+        title_label.setFont(QFont("Arial", 14, QFont.Weight.Bold))
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title_label.setStyleSheet("color: #2c3e50;")
 
         version_label = QLabel(f"版本: V{version} | © 2025 D&Ai/2FX 文件归集管理器")
         version_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        version_label.setStyleSheet("color: #7f8c8d; font-size: 10pt;")
+        version_label.setStyleSheet("color: #7f8c8d; font-size: 8pt;")
         
         return title_label, version_label
 
@@ -124,15 +124,19 @@ class UIBuilder:
         """构建搜索条件群组"""
         search_group = QGroupBox("搜索条件")
         search_layout = QVBoxLayout()
+        search_layout.setSpacing(6)
+        search_layout.setContentsMargins(8, 8, 8, 8)
 
         # 文件夹管理部分
         folder_layout = QVBoxLayout()
+        folder_layout.setSpacing(4)
         folder_label = QLabel("搜索文件夹:")
         
         folder_list = QListWidget()
-        folder_list.setMaximumHeight(75)
+        folder_list.setMaximumHeight(50)
 
         folder_button_layout = QHBoxLayout()
+        folder_button_layout.setSpacing(4)
         add_folder_button = QPushButton("添加文件夹")
         add_drive_button = QPushButton("添加盘符")
         remove_folder_button = QPushButton("删除选中")
@@ -150,10 +154,11 @@ class UIBuilder:
 
         # 关键词部分
         keyword_layout = QHBoxLayout()
+        keyword_layout.setSpacing(5)
         keyword_label = QLabel("关键词:")
         keyword_entry = QTextEdit()
         keyword_entry.setPlaceholderText("输入文件名包含的关键词，支持多行输入")
-        keyword_entry.setFixedHeight(80)
+        keyword_entry.setFixedHeight(48)
         keyword_entry.setToolTip(
             "支持多种搜索模式：\n"
             "- 基本搜索: 输入关键词，如 \"报告\"\n"
@@ -172,6 +177,7 @@ class UIBuilder:
 
         # 搜索模式和归集模式部分
         search_mode_layout = QHBoxLayout()
+        search_mode_layout.setSpacing(6)
         search_mode_label = QLabel("搜索模式:")
 
         search_mode_group = QButtonGroup()
@@ -220,6 +226,7 @@ class UIBuilder:
 
         # 文件类型部分
         filetype_layout = QHBoxLayout()
+        filetype_layout.setSpacing(5)
         filetype_label = QLabel("文件类型:")
         filetype_combo = QComboBox()
         filetype_combo.addItem("所有文件", "")
@@ -248,8 +255,10 @@ class UIBuilder:
 
         # 日期和大小部分
         date_size_layout = QHBoxLayout()
+        date_size_layout.setSpacing(10)
 
         mod_date_layout = QVBoxLayout()
+        mod_date_layout.setSpacing(3)
         mod_date_label = QLabel("修改日期:")
         mod_date_combo = QComboBox()
         mod_date_combo.addItem("不限", (None, None))
@@ -272,6 +281,7 @@ class UIBuilder:
         date_size_layout.addLayout(mod_date_layout)
 
         file_size_layout = QVBoxLayout()
+        file_size_layout.setSpacing(3)
         file_size_label = QLabel("文件大小:")
         file_size_combo = QComboBox()
         file_size_combo.addItem("不限", (0, float('inf')))
@@ -318,8 +328,8 @@ class UIBuilder:
     def build_action_buttons():
         """构建操作按钮 - 单行紧凑布局"""
         button_layout = QHBoxLayout()
-        button_layout.setSpacing(6)
-        button_layout.setContentsMargins(0, 5, 0, 5)
+        button_layout.setSpacing(3)
+        button_layout.setContentsMargins(0, 2, 0, 2)
         
         search_button = QPushButton("模糊查找")
         search_button.setToolTip("搜索包含关键词的文件（默认模式）")
@@ -368,17 +378,19 @@ class UIBuilder:
         """构建搜索结果群组"""
         results_group = QGroupBox("搜索结果")
         results_layout = QVBoxLayout()
+        results_layout.setSpacing(5)
+        results_layout.setContentsMargins(8, 8, 8, 8)
 
         results_tree = QTreeWidget()
         results_tree.setHeaderLabels(["文件名", "路径", "大小", "修改日期", "匹配关键词"])
-        results_tree.setColumnWidth(0, 250)
-        results_tree.setColumnWidth(1, 350)
+        results_tree.setColumnWidth(0, 180)
+        results_tree.setColumnWidth(1, 250)
         results_tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
         results_tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         results_tree.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Interactive)
         results_tree.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Interactive)
         results_tree.header().setStretchLastSection(False)
-        results_tree.setMinimumHeight(125)
+        results_tree.setMinimumHeight(80)
 
         results_layout.addWidget(results_tree)
 
@@ -450,8 +462,8 @@ class UIBuilder:
     def build_main_layout(version):
         """构建主布局"""
         main_layout = QVBoxLayout()
-        main_layout.setSpacing(15)
-        main_layout.setContentsMargins(20, 20, 20, 20)
+        main_layout.setSpacing(8)
+        main_layout.setContentsMargins(12, 12, 12, 12)
 
         # 标题
         title_label, version_label = UIBuilder.build_title_widgets(version)
@@ -472,7 +484,7 @@ class UIBuilder:
 
         # 状态栏
         status_label = QLabel("就绪")
-        status_label.setStyleSheet("color: #7f8c8d; font-size: 10pt;")
+        status_label.setStyleSheet("color: #7f8c8d; font-size: 9pt;")
         main_layout.addWidget(status_label)
 
         return (main_layout, title_label, version_label, search_components, 
