@@ -21,7 +21,6 @@ def start_search(self):
         return
 
     self.cancel_button.setEnabled(True)
-    self.cancel_button.setVisible(True)
     self.cancel_search = False
 
     # 检查聚合模式
@@ -39,7 +38,6 @@ def start_search(self):
         QMessageBox.warning(self, "提示", "请输入至少一个关键词。")
         self.search_button.setEnabled(True)
         self.cancel_button.setEnabled(False)
-        self.cancel_button.setVisible(False)
         return
 
     file_types = self.filetype_combo.currentData()
@@ -164,7 +162,6 @@ def start_exact_search(self):
         return
 
     self.cancel_button.setEnabled(True)
-    self.cancel_button.setVisible(True)
     self.cancel_search = False
 
     # 检查聚合模式
@@ -182,7 +179,6 @@ def start_exact_search(self):
         QMessageBox.warning(self, "提示", "请输入至少一个关键词。")
         self.exact_search_button.setEnabled(True)
         self.cancel_button.setEnabled(False)
-        self.cancel_button.setVisible(False)
         return
 
     file_types = self.filetype_combo.currentData()
