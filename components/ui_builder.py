@@ -368,6 +368,11 @@ class UIBuilder:
         cancel_button.setEnabled(False)
         cancel_button.setToolTip("停止当前搜索")
         
+        reset_button = QPushButton("复位")
+        reset_button.setFixedSize(75, 26)
+        reset_button.setEnabled(True)
+        reset_button.setToolTip("重置程序到初始状态")
+        
         button_layout.addWidget(search_button)
         button_layout.addWidget(exact_search_button)
         button_layout.addWidget(target_button)
@@ -376,10 +381,11 @@ class UIBuilder:
         button_layout.addWidget(log_button)
         button_layout.addWidget(help_button)
         button_layout.addWidget(cancel_button)
+        button_layout.addWidget(reset_button)
         button_layout.addStretch(1)
 
         return (button_layout, search_button, exact_search_button, cancel_button, target_button, 
-                copy_button, delete_button, log_button, help_button)
+                copy_button, delete_button, log_button, help_button, reset_button)
 
     @staticmethod
     def build_results_group():
@@ -400,7 +406,8 @@ class UIBuilder:
         results_tree.header().setStretchLastSection(False)
         results_tree.setMinimumHeight(80)
 
-        results_layout.addWidget(results_tree)
+        # 添加结果树，并给予伸缩因子以占用可用空间
+        results_layout.addWidget(results_tree, 1)
 
         current_path_label = QLabel("当前搜索路径: ")
         current_path_label.setStyleSheet("color: #7f8c8d; font-style: italic;")
@@ -462,16 +469,25 @@ class UIBuilder:
             }
         """)
         
+        # 复制反馈标签
+        copy_feedback_label = QLabel("")
+        copy_feedback_label.setStyleSheet("""
+            color: #27ae60;
+            font-size: 8pt;
+            margin-left: 10px;
+        """)
+        
         unfound_keywords_header.addWidget(unfound_keywords_label)
         unfound_keywords_header.addStretch()
         unfound_keywords_header.addWidget(copy_unfound_button)
+        unfound_keywords_header.addWidget(copy_feedback_label)
         
         unfound_keywords_container_layout.addLayout(unfound_keywords_header)
         
         # 树形控件显示区域
         unfound_keywords_tree = QTreeWidget()
         unfound_keywords_tree.setMaximumHeight(100)
-        unfound_keywords_tree.setVisible(False)  # 默认隐藏
+        unfound_keywords_tree.setVisible(False)  # 默认隐藏，由 _update_unfound_keywords_display 控制
         unfound_keywords_tree.setColumnCount(1)
         unfound_keywords_tree.setHeaderLabels(["关键词"])
         unfound_keywords_tree.setStyleSheet("""
@@ -489,12 +505,49 @@ class UIBuilder:
         unfound_keywords_container.setLayout(unfound_keywords_container_layout)
         unfound_keywords_container.setVisible(False)
         results_layout.addWidget(unfound_keywords_container)
+        
+        # 只找到一个结果的关键词显示区域 - 使用树形控件
+        single_result_keywords_container = QWidget()
+        single_result_keywords_container_layout = QVBoxLayout()
+        single_result_keywords_container_layout.setContentsMargins(0, 5, 0, 0)
+        single_result_keywords_container_layout.setSpacing(3)
+        
+        # 标题行
+        single_result_keywords_header = QHBoxLayout()
+        single_result_keywords_label = QLabel("只找到一个的关键词:")
+        single_result_keywords_label.setStyleSheet("color: #f39c12; font-weight: bold; font-size: 9pt;")
+        single_result_keywords_header.addWidget(single_result_keywords_label)
+        single_result_keywords_header.addStretch()
+        single_result_keywords_container_layout.addLayout(single_result_keywords_header)
+        
+        # 树形控件显示区域
+        single_result_keywords_tree = QTreeWidget()
+        single_result_keywords_tree.setMaximumHeight(100)
+        single_result_keywords_tree.setVisible(False)  # 默认隐藏，由 _update_single_result_keywords_display 控制
+        single_result_keywords_tree.setColumnCount(1)
+        single_result_keywords_tree.setHeaderLabels(["关键词"])
+        single_result_keywords_tree.setStyleSheet("""
+            QTreeWidget {
+                background-color: rgba(255, 253, 235, 180);
+                border: 1px solid #f39c12;
+                border-radius: 3px;
+            }
+            QTreeWidget::item {
+                padding: 2px;
+            }
+        """)
+        
+        single_result_keywords_container_layout.addWidget(single_result_keywords_tree)
+        single_result_keywords_container.setLayout(single_result_keywords_container_layout)
+        single_result_keywords_container.setVisible(False)
+        results_layout.addWidget(single_result_keywords_container)
 
         results_group.setLayout(results_layout)
 
         return (results_group, results_tree, current_path_label, 
                 progress_bar, status_count_label, keywords_info_label, keywords_buttons_container,
-                unfound_keywords_container, unfound_keywords_tree, copy_unfound_button)
+                unfound_keywords_container, unfound_keywords_tree, copy_unfound_button, copy_feedback_label,
+                single_result_keywords_container, single_result_keywords_tree)
 
     @staticmethod
     def build_main_layout(version):

@@ -28,8 +28,12 @@ from .search_operations import (
 from .results_manager import (
     _display_search_results,
     _update_unfound_keywords_display,
+    _update_single_result_keywords_display,
     _create_keyword_view_buttons,
     _show_keyword_results,
+    toggle_unfound_list,
+    copy_unfound_keywords,
+    on_unfound_keyword_item_clicked,
     show_context_menu,
     show_file_info,
 )
@@ -47,6 +51,7 @@ from .ui_interactions import (
     open_file_folder,
     show_help,
     cancel_search_action,
+    reset_application,
 )
 
 __all__ = [
@@ -69,8 +74,12 @@ __all__ = [
     # Results Manager
     '_display_search_results',
     '_update_unfound_keywords_display',
+    '_update_single_result_keywords_display',
     '_create_keyword_view_buttons',
     '_show_keyword_results',
+    'toggle_unfound_list',
+    'copy_unfound_keywords',
+    'on_unfound_keyword_item_clicked',
     'show_context_menu',
     'show_file_info',
     # File Operations UI
@@ -84,4 +93,5 @@ __all__ = [
     'open_file_folder',
     'show_help',
     'cancel_search_action',
+    'reset_application',
 ]

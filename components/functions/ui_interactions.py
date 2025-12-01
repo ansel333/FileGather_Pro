@@ -139,3 +139,55 @@ def cancel_search_action(self):
     self.search_button.setEnabled(True)
     self.exact_search_button.setEnabled(True)
     self.add_log("取消搜索")
+
+
+def reset_application(self):
+    """复位应用程序到初始状态"""
+    # 清空所有搜索数据
+    self.search_folders = []
+    self.search_results = []
+    self.target_folder = None
+    self.cancel_search = False
+    self.operation_log = []
+    self.operated_files = set()
+    self.found_files_count = 0
+    self.keyword_results = {}
+    self.unfound_keywords = []
+    
+    # 清空UI
+    self.folder_list.clear()
+    self.keyword_entry.clear()
+    self.results_tree.clear()
+    self.keywords_info_label.clear()
+    self.status_count_label.setText("已找到: 0 个文件")
+    self.current_path_label.setText("当前搜索路径: ")
+    self.status_label.setText("就绪")
+    
+    # 清空单结果关键词树
+    self.single_result_keywords_tree.clear()
+    self.single_result_keywords_container.setVisible(False)
+    
+    # 清空未找到关键词树
+    self.unfound_keywords_tree.clear()
+    self.unfound_keywords_container.setVisible(False)
+    self.copy_feedback_label.setText("")
+    
+    # 清空关键词查看按钮
+    while self.keywords_buttons_container.layout().count():
+        child = self.keywords_buttons_container.layout().takeAt(0)
+        if child.widget():
+            child.widget().deleteLater()
+    
+    # 重置按钮状态
+    self.search_button.setEnabled(True)
+    self.exact_search_button.setEnabled(True)
+    self.cancel_button.setEnabled(False)
+    self.copy_button.setEnabled(False)
+    self.delete_button.setEnabled(False)
+    self.progress_bar.setVisible(False)
+    
+    # 重置窗口大小到初始状态
+    self.setGeometry(100, 100, 800, 750)
+    
+    self.add_log("程序已复位到初始状态")
+

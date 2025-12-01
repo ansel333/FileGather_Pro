@@ -96,6 +96,7 @@ class FileGatherPro(QMainWindow):
         # 结果管理方法
         self._display_search_results = functions._display_search_results.__get__(self, FileGatherPro)
         self._update_unfound_keywords_display = functions._update_unfound_keywords_display.__get__(self, FileGatherPro)
+        self._update_single_result_keywords_display = functions._update_single_result_keywords_display.__get__(self, FileGatherPro)
         self._create_keyword_view_buttons = functions._create_keyword_view_buttons.__get__(self, FileGatherPro)
         self._show_keyword_results = functions._show_keyword_results.__get__(self, FileGatherPro)
         self.toggle_unfound_list = functions.toggle_unfound_list.__get__(self, FileGatherPro)
@@ -115,6 +116,8 @@ class FileGatherPro(QMainWindow):
         self.open_selected_file = functions.open_selected_file.__get__(self, FileGatherPro)
         self.open_file_folder = functions.open_file_folder.__get__(self, FileGatherPro)
         self.show_help = functions.show_help.__get__(self, FileGatherPro)
+        self.cancel_search_action = functions.cancel_search_action.__get__(self, FileGatherPro)
+        self.reset_application = functions.reset_application.__get__(self, FileGatherPro)
 
     def _init_state(self):
         """初始化应用程序状态"""
@@ -158,13 +161,14 @@ class FileGatherPro(QMainWindow):
         # 操作按钮组件
         (_, self.search_button, self.exact_search_button, self.cancel_button, 
          self.target_button, self.copy_button, self.delete_button, self.log_button, 
-         self.help_button) = button_comp
+         self.help_button, self.reset_button) = button_comp
         
         # 结果显示组件
         (self.results_group, self.results_tree, self.current_path_label,
          self.progress_bar, self.status_count_label, self.keywords_info_label,
          self.keywords_buttons_container, self.unfound_keywords_container,
-         self.unfound_keywords_tree, self.copy_unfound_button) = results_comp
+         self.unfound_keywords_tree, self.copy_unfound_button, self.copy_feedback_label,
+         self.single_result_keywords_container, self.single_result_keywords_tree) = results_comp
         
         self.status_label = status_label
 
@@ -178,6 +182,7 @@ class FileGatherPro(QMainWindow):
         self.search_button.clicked.connect(self.start_search)
         self.exact_search_button.clicked.connect(self.start_exact_search)
         self.cancel_button.clicked.connect(self.cancel_search_action)
+        self.reset_button.clicked.connect(self.reset_application)
         
         self.target_button.clicked.connect(self.select_target_folder)
         self.copy_button.clicked.connect(self.copy_files)
