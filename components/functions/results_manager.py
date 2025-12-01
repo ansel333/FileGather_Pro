@@ -8,7 +8,7 @@ from pathlib import Path
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
-    QTreeWidgetItem, QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QTreeWidget
+    QTreeWidgetItem, QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QTreeWidget, QWidget, QApplication
 )
 
 from ..utils import format_size
@@ -106,14 +106,27 @@ def _display_search_results(self, all_found_files, keyword_results):
 
 
 def _update_unfound_keywords_display(self, unfound_keywords):
-    """更新未找到结果的关键词显示区域"""
+    """更新未找到结果的关键词显示区域 - 使用树形控件"""
+    self.unfound_keywords = unfound_keywords
+    
+    self.unfound_keywords_tree.clear()
+    
     if unfound_keywords:
-        text = "\n".join(unfound_keywords)
-        self.unfound_keywords_text.setPlainText(text)
-        self.unfound_keywords_group.setVisible(True)
+        # 创建根节点
+        root_item = QTreeWidgetItem([f"未找到结果的关键词 ({len(unfound_keywords)}项)"])
+        root_item.setExpanded(True)
+        self.unfound_keywords_tree.addTopLevelItem(root_item)
+        
+        # 为每个关键词添加子节点
+        for keyword in unfound_keywords:
+            child_item = QTreeWidgetItem([keyword])
+            root_item.addChild(child_item)
+        
+        # 显示容器
+        self.unfound_keywords_container.setVisible(True)
     else:
-        self.unfound_keywords_text.setPlainText("")
-        self.unfound_keywords_group.setVisible(False)
+        self.unfound_keywords_tree.clear()
+        self.unfound_keywords_container.setVisible(False)
 
 
 def _create_keyword_view_buttons(self, multi_result_keywords_info):
@@ -272,9 +285,28 @@ def show_file_info(self, item, column):
         <b>内容预览 (前300字符)：</b>
         <pre>{content_preview}</pre>
         """
-
-        QMessageBox.information(self, "文件详情", info)
-        self.add_log(f"查看文件信息: {file_path}", file_path)
     except Exception as e:
         from PyQt6.QtWidgets import QMessageBox
         QMessageBox.warning(self, "错误", f"无法获取文件信息: {str(e)}")
+
+def toggle_unfound_list(self):
+    """切换未找到关键词树的显示/隐藏"""
+    is_visible = self.unfound_keywords_tree.isVisible()
+    self.unfound_keywords_tree.setVisible(not is_visible)
+
+
+def copy_unfound_keywords(self):
+    """复制所有未找到的关键词到剪贴板"""
+    if self.unfound_keywords:
+        text = "\n".join(self.unfound_keywords)
+        clipboard = QApplication.clipboard()
+        clipboard.setText(text)
+        self.add_log(f"已复制 {len(self.unfound_keywords)} 个未找到的关键词到剪贴板")
+
+
+def on_unfound_keyword_item_clicked(self, item, column):
+    """处理树项点击事件 - 展开/折叠根节点"""
+    # 根节点自动展开/折叠
+    if item.parent() is None:
+        item.setExpanded(not item.isExpanded())
+

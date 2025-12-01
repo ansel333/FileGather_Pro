@@ -98,6 +98,9 @@ class FileGatherPro(QMainWindow):
         self._update_unfound_keywords_display = functions._update_unfound_keywords_display.__get__(self, FileGatherPro)
         self._create_keyword_view_buttons = functions._create_keyword_view_buttons.__get__(self, FileGatherPro)
         self._show_keyword_results = functions._show_keyword_results.__get__(self, FileGatherPro)
+        self.toggle_unfound_list = functions.toggle_unfound_list.__get__(self, FileGatherPro)
+        self.copy_unfound_keywords = functions.copy_unfound_keywords.__get__(self, FileGatherPro)
+        self.on_unfound_keyword_item_clicked = functions.on_unfound_keyword_item_clicked.__get__(self, FileGatherPro)
         self.show_context_menu = functions.show_context_menu.__get__(self, FileGatherPro)
         self.show_file_info = functions.show_file_info.__get__(self, FileGatherPro)
         
@@ -160,8 +163,8 @@ class FileGatherPro(QMainWindow):
         # 结果显示组件
         (self.results_group, self.results_tree, self.current_path_label,
          self.progress_bar, self.status_count_label, self.keywords_info_label,
-         self.keywords_buttons_container, self.unfound_keywords_group, 
-         self.unfound_keywords_text) = results_comp
+         self.keywords_buttons_container, self.unfound_keywords_container,
+         self.unfound_keywords_tree, self.copy_unfound_button) = results_comp
         
         self.status_label = status_label
 
@@ -187,3 +190,7 @@ class FileGatherPro(QMainWindow):
         
         self.results_tree.itemDoubleClicked.connect(self.show_file_info)
         self.results_tree.customContextMenuRequested.connect(self.show_context_menu)
+        
+        # 未找到关键词的处理
+        self.copy_unfound_button.clicked.connect(self.copy_unfound_keywords)
+        self.unfound_keywords_tree.itemClicked.connect(self.on_unfound_keyword_item_clicked)

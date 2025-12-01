@@ -434,37 +434,67 @@ class UIBuilder:
         keywords_buttons_container.setLayout(keywords_buttons_layout)
         results_layout.addWidget(keywords_buttons_container)
         
-        # 未找到结果的关键词显示区域
-        unfound_keywords_group = QGroupBox("未找到结果的关键词")
-        unfound_keywords_group.setStyleSheet("""
-            QGroupBox {
-                font-weight: bold;
-                border: 1px solid #e74c3c;
-                border-radius: 5px;
-                margin-top: 1ex;
-                background-color: rgba(255, 250, 250, 180);
+        # 未找到结果的关键词显示区域 - 使用树形控件
+        unfound_keywords_container = QWidget()
+        unfound_keywords_container_layout = QVBoxLayout()
+        unfound_keywords_container_layout.setContentsMargins(0, 5, 0, 0)
+        unfound_keywords_container_layout.setSpacing(3)
+        
+        # 标题和操作按钮行
+        unfound_keywords_header = QHBoxLayout()
+        unfound_keywords_label = QLabel("未找到结果的关键词:")
+        unfound_keywords_label.setStyleSheet("color: #e74c3c; font-weight: bold; font-size: 9pt;")
+        
+        copy_unfound_button = QPushButton("复制")
+        copy_unfound_button.setFixedWidth(50)
+        copy_unfound_button.setToolTip("复制所有未找到的关键词")
+        copy_unfound_button.setStyleSheet("""
+            QPushButton {
+                background-color: #e74c3c;
+                color: white;
+                border: none;
+                border-radius: 3px;
+                padding: 3px 8px;
+                font-size: 9pt;
             }
-            QGroupBox::title {
-                subcontrol-origin: margin;
-                left: 10px;
-                padding: 0 3px 0 3px;
+            QPushButton:hover {
+                background-color: #c0392b;
             }
         """)
-        unfound_keywords_layout = QVBoxLayout()
-        unfound_keywords_text = QPlainTextEdit()
-        unfound_keywords_text.setMaximumHeight(100)
-        unfound_keywords_text.setReadOnly(True)
-        unfound_keywords_text.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
-        unfound_keywords_layout.addWidget(unfound_keywords_text)
-        unfound_keywords_group.setLayout(unfound_keywords_layout)
-        unfound_keywords_group.setVisible(False)
-        results_layout.addWidget(unfound_keywords_group)
+        
+        unfound_keywords_header.addWidget(unfound_keywords_label)
+        unfound_keywords_header.addStretch()
+        unfound_keywords_header.addWidget(copy_unfound_button)
+        
+        unfound_keywords_container_layout.addLayout(unfound_keywords_header)
+        
+        # 树形控件显示区域
+        unfound_keywords_tree = QTreeWidget()
+        unfound_keywords_tree.setMaximumHeight(100)
+        unfound_keywords_tree.setVisible(False)  # 默认隐藏
+        unfound_keywords_tree.setColumnCount(1)
+        unfound_keywords_tree.setHeaderLabels(["关键词"])
+        unfound_keywords_tree.setStyleSheet("""
+            QTreeWidget {
+                background-color: rgba(255, 250, 250, 180);
+                border: 1px solid #e74c3c;
+                border-radius: 3px;
+            }
+            QTreeWidget::item {
+                padding: 2px;
+            }
+        """)
+        
+        unfound_keywords_container_layout.addWidget(unfound_keywords_tree)
+        unfound_keywords_container.setLayout(unfound_keywords_container_layout)
+        unfound_keywords_container.setVisible(False)
+        results_layout.addWidget(unfound_keywords_container)
 
         results_group.setLayout(results_layout)
 
         return (results_group, results_tree, current_path_label, 
                 progress_bar, status_count_label, keywords_info_label, keywords_buttons_container,
-                unfound_keywords_group, unfound_keywords_text)
+                unfound_keywords_container, unfound_keywords_tree, copy_unfound_button)
 
     @staticmethod
     def build_main_layout(version):
