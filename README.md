@@ -32,13 +32,16 @@ A powerful file management tool for quickly searching, categorizing, and managin
 - Chinese font support
 
 ### 🎨 User Interface
+- **Optimized for 1080p displays**: Window 800×750 pixels, compact and efficient
 - Modern PyQt6 interface (6.7.1)
 - White background + colored border button design
-- Single-line compact button layout
-- Real-time search result preview
+- Single-line compact button layout (8 buttons, perfectly centered)
+- Real-time search result preview with tree widget display
+- **Enhanced keyword display**: Tree widgets for found and unfound keywords
 - Right-click context menu
 - Progress indication and status feedback
 - Conditional visibility cancel button
+- **Reset button**: Clear all data and restore initial state
 
 ---
 
@@ -217,6 +220,61 @@ pip install PyQt6==6.7.1 reportlab==4.4.5 PyMuPDF==1.26.6 python-docx==1.2.0 ope
 ---
 
 ## 📝 Version History
+
+### 🎉 v2.5.1 (2025-12-01) - UI Optimization & Keyword Display Enhancement
+**Major Improvements**:
+- 🎨 **Compact UI for 1080p Displays**
+  - Window size optimized: 1000×1050 → **800×750 pixels** (25% reduction)
+  - Perfect fit for 1080p (1920×1080) laptop/monitor displays
+  - Fixed window size with 650px minimum height for stability
+  - All components proportionally reduced while maintaining usability
+  
+- 🔍 **Enhanced Keyword Display System**
+  - Unfound keywords: Collapsible **tree widget** with visual hierarchy
+  - Single-result keywords: Separate tree widget for easy identification
+  - All found keywords now displayed (not just multi-result ones)
+  - Copy feedback: Shows keyword count with 3-second auto-clear
+  - Better visual organization with #e74c3c (red) text for unfound keywords
+  
+- 🎯 **Button Layout Optimization**
+  - Single-row centered button layout (8 buttons in 9 positions)
+  - Fixed button size: **75×26 pixels** with 3px spacing
+  - Perfect alignment verified with mathematical precision
+  - All buttons visible at once without horizontal scrolling
+  
+- 🐛 **Critical Bug Fixes**
+  - Fixed consecutive search failures (exact search followed by fuzzy search)
+  - Improved button state management during search operations
+  - Cancel button always visible during active searches
+  - **Reset Button**: New button to clear all data and reset window to initial state
+  
+- 📊 **UI Interaction Improvements**
+  - Feedback labels with auto-clear timer (3-second timeout)
+  - Better visual feedback for copy operations
+  - Status label shows operation results clearly
+  - Smooth state transitions between search modes
+  
+- 🧪 **Quality Assurance**
+  - 47+ unit tests all passing
+  - 12 PyQt6-specific tests verified
+  - All UI components tested and validated
+  - Tested on Windows 11 at 1080p resolution
+  
+**Technical Details**:
+- Window: `setGeometry(100, 100, 800, 750)`, `setMinimumSize(800, 650)`
+- Button layout: 9 positions, 8 buttons, centered with stretch layout
+- Tree widgets: Max 100px height, collapsible, proper indentation
+- Feedback labels: #27ae60 (green) text, 8pt font, 3000ms timer
+- Version: 2.5.1, all files updated
+- Release assets: Windows .exe, macOS (Intel/ARM), Linux .deb
+
+**Related Files**:
+- `components/ui_builder.py` - Window geometry, button layout, tree widgets
+- `components/main_window.py` - Version handling, window initialization
+- `components/functions/results_manager.py` - Keyword display logic
+- `components/functions/ui_interactions.py` - Reset functionality
+
+---
 
 ### 🎉 v2.5.0 (2025-11-30) - Unified Version Management & Multi-Platform Release
 **Major Improvements**:
@@ -408,7 +466,7 @@ filegather-pro
 **Developer**: [daiyixr](https://github.com/daiyixr)  
 **Contributors**: [ansel333](https://github.com/ansel333) - Code refactoring, UI optimization, CI/CD workflows, icon integration  
 **Created**: 2024  
-**Last Updated**: 2025-11-30  
+**Last Updated**: 2025-12-01  
 
 ---
 
